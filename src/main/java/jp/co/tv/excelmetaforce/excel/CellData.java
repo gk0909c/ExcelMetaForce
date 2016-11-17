@@ -16,4 +16,16 @@ public class CellData {
         this.value = value;
     }
     
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public int getColSpan() {
+        return colSpan;
+    }
+    
 }
