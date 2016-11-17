@@ -1,9 +1,13 @@
 package jp.co.tv.excelmetaforce.excel;
 
+import org.apache.poi.ss.usermodel.Workbook;
+
 import com.sforce.soap.metadata.Metadata;
 
-public class ObjectData implements SheetData {
+public class ObjectData extends SheetData {
     private static final String SHEET_NAME = "オブジェクト定義";
+    
+    private GeneralData generalData;
     
     private CellData report = new CellData(16, 10, 0);
     private CellData activity = new CellData(17, 10, 0);
@@ -18,13 +22,17 @@ public class ObjectData implements SheetData {
     private CellData startNum = new CellData(30, 10, 0);
     private CellData description = new CellData(7, 1, 0);
 
+    public ObjectData(Workbook book) {
+        super(book);
+    }
+
     @Override
     public Metadata[] read() {
         return null;
     }
 
     @Override
-    public void write(Metadata[] write) {
+    public void write(Metadata... write) {
 
     }
 

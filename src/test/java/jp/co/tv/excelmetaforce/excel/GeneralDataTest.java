@@ -1,17 +1,20 @@
 package jp.co.tv.excelmetaforce.excel;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import static org.hamcrest.CoreMatchers.*; 
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
 public class GeneralDataTest {
     private Workbook book;
+
+    /**
+     * Create excel data
+     */
     @Before
     public void setup() {
         book = new XSSFWorkbook();
