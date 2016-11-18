@@ -1,0 +1,33 @@
+fieldType:
+  Text: テキスト
+  AutoNumber: 自動採番
+  Number: 数値
+  Date: 日付
+  DateTime: 日付／時間
+  Picklist: 選択リスト
+  Lookup: 参照関係
+  MasterDetail: 主従関係
+  Checkbox: チェックボックス
+  EncryptedText: テキスト(暗号化)
+  TextArea: テキストエリア
+  LongTextArea: ロングテキストエリア
+  Percent: パーセント
+  Currency: 通貨
+  Email: メール
+  Phone: 電話
+  Url: URL
+  MultiselectPicklist: 複数選択リスト
+maskType:
+  all: 全ての文字をマスク
+  lastFour: 最後の4桁を表示
+  creditCard: クレジットカード番号
+  nino: 国民保険番号
+  ssn: 社会保障番号
+  sin: 社会保険番号
+sharingModel:
+  Private: 非公開
+  ReadWrite: 公開（更新可能）
+  Read: 公開（参照のみ）
+  ControlledByParent: 親レコードに連動
+  FullAccess: 
+   
