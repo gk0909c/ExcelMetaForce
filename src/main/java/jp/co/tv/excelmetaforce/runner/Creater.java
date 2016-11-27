@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import com.sforce.soap.metadata.Metadata;
 
 import jp.co.tv.excelmetaforce.excel.SheetData;
+import jp.co.tv.excelmetaforce.sfdc.ConnectionManager;
 import jp.co.tv.excelmetaforce.sfdc.Connector;
 
 public class Creater {
@@ -30,9 +31,9 @@ public class Creater {
     /**
      * Write object definition to excel file
      */
-    public void read() {
-        Connector conn = Connector.getInstance();
-        Metadata[] metadata = conn.readMetadata(data.getMetadataType(), data.getTargetMetadata());
-        data.write(metadata);
+    public void create() {
+        Connector conn = new Connector(new ConnectionManager());
+        Metadata[] metadata = data.read();
+        conn.createMetadata(metadata);
     }
 }

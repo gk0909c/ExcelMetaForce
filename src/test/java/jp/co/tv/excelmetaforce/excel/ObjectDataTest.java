@@ -2,6 +2,7 @@ package jp.co.tv.excelmetaforce.excel;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -24,10 +25,6 @@ public class ObjectDataTest {
     @Before
     public void setup() {
         book = new XSSFWorkbook();
-        Sheet generalSheet = book.createSheet("表紙");
-        generalSheet.createRow(30).createCell(12).setCellValue("TestObj__c");
-        generalSheet.createRow(32).createCell(12).setCellValue("TestLabel");
-
         Sheet objectSheet = book.createSheet("オブジェクト定義");
         objectSheet.createRow(7).createCell(1).setCellValue("Object Description");
         objectSheet.createRow(16).createCell(10).setCellValue("○");
@@ -43,14 +40,14 @@ public class ObjectDataTest {
         objectSheet.createRow(29).createCell(10).setCellValue("Test-{00000}");
         objectSheet.createRow(30).createCell(10).setCellValue(1);
     }
-
+    
     @Test
     public void testRead() {
         ObjectData data = new ObjectData(book);
+        data.generalData = mock(GeneralData.class);
+
         CustomObject object = (CustomObject)data.read()[0];
 
-        assertThat(object.getFullName(), is("TestObj__c"));
-        assertThat(object.getLabel(), is("TestLabel"));
         assertThat(object.getEnableReports(), is(true));
         assertThat(object.getEnableActivities(), is(true));
         assertThat(object.getAllowInChatterGroups(), is(true));
@@ -65,7 +62,5 @@ public class ObjectDataTest {
         assertThat(name.getType(), is(FieldType.AutoNumber));
         assertThat(name.getDisplayFormat(), is("Test-{00000}"));
         assertThat(name.getStartingNumber(), is(1));
-
     }
-
 }

@@ -7,6 +7,6 @@ public final class CreateCustomObject {
     private CreateCustomObject() {}
 
     public static void main(String... args) {
-        new Creater(ObjectData.class).read();
+        new Creater(ObjectData.class).create();
     }
 }
