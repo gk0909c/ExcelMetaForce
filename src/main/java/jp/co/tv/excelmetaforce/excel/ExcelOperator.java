@@ -41,7 +41,58 @@ public class ExcelOperator {
     
     private Cell getCell(CellInfo cellInfo) {
         Row row = sheet.getRow(cellInfo.getRow());
-        return row.getCell(cellInfo.getCol());
+        if (row == null) {
+            row = sheet.createRow(cellInfo.getRow());
+        }
+        
+        Cell cell = row.getCell(cellInfo.getCol());
+        if (cell == null) {
+            cell = row.createCell(cellInfo.getCol());
+        }
+
+        return cell;
+    }
+    
+    /**
+     * set string value to cell
+     * 
+     * @param cellInfo cellInfo
+     * @param value string
+     */
+    public void setValue(CellInfo cellInfo, String value) {
+        Cell cell = getCell(cellInfo);
+        cell.setCellValue(value);
+    }
+
+    /**
+     * return numeric cell value
+     * @param cellInfo cellInfo
+     * @param value integer
+     */
+    public void setValue(CellInfo cellInfo, Integer value) {
+        Cell cell = getCell(cellInfo);
+        cell.setCellValue(value.toString());
+    }
+
+    /**
+     * set boolean value to cell
+     * 
+     * @param cellInfo cellInfo
+     * @param value boolean
+     */
+    public void setValue(CellInfo cellInfo, boolean value) {
+        Cell cell = getCell(cellInfo);
+        cell.setCellValue(value ? "○" : "");
+    }
+
+    /**
+     * return numeric cell value, if 0, set empty
+     * @param cellInfo cellInfo
+     * @param value integer
+     */
+    public void setValueToEmpty(CellInfo cellInfo, Integer value) {
+        Cell cell = getCell(cellInfo);
+        cell.setCellValue(value == 0 ? "" : value.toString());
     }
 
 }

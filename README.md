@@ -6,6 +6,24 @@ This is developing now.
 ## using
 + poi
 
+## salesforce connection setting
+create yaml file ./sfdc_connection_info.yml.  
+like this
+
+```yaml
+!!jp.co.techvan.handleSfdcDD.sfdc.SfdcConnectionInfo
+username: xxx@xxx
+password: xxxx
+securityToken: 
+partnerUri: https://login.salesforce.com/services/Soap/u/38.0
+proxyHost: 
+proxyPort: 
+proxyUser: 
+proxyPass: 
+```
+
+
+
 ## テンポラリ設計
 ### やりたい操作
 #### Excelの情報をSalesforceに登録

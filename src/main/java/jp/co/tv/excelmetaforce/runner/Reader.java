@@ -21,7 +21,7 @@ public class Reader {
      */
     public Reader(Class<? extends SheetData> data) {
         try {
-            Workbook book = WorkbookFactory.create(new File("filename.xlsx"), "", true);
+            Workbook book = WorkbookFactory.create(new File("オブジェクト定義_format.xlsx"), "", true);
             this.data = data.getDeclaredConstructor(SheetData.class).newInstance(book);
         } catch (Exception e) {
             throw new RuntimeException(e);

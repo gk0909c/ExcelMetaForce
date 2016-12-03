@@ -24,7 +24,7 @@ public class ExcelToMetadata {
     }
     
     /**
-     * convert sharing model for regst sfdc
+     * convert sharing model for regist sfdc
      * 
      * @param val sharing model on excel
      * @return SharingModel
