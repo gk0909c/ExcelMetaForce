@@ -128,6 +128,23 @@ public class ExcelToMetadata {
         return FieldType.valueOf(key);
     }
     
+    /**
+     * get arg field is numeric type
+     * 
+     * @param type FieldType
+     * @return is numeric type
+     */
+    // TODO 逆方向も同じなので、まとめる。
+    public boolean isNumericType(FieldType type) {
+        return FieldType.Number.equals(type)
+                || FieldType.Currency.equals(type)
+                || FieldType.Percent.equals(type);
+    }
+    
+    public Integer getVisibleLines(String val) {
+        return StringUtils.isEmpty(val) ? 0 : Integer.parseInt(val);
+    }
+    
     private String getAssociationKey(String kind, String val) {
         BidiMap<String ,String> association = new DualHashBidiMap<>(associations.get(kind));
         return association.getKey(val);

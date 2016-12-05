@@ -6,17 +6,15 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import com.sforce.soap.metadata.CustomField;
-import com.sforce.soap.metadata.FieldType;
 import com.sforce.soap.metadata.Metadata;
 
 import jp.co.tv.excelmetaforce.converter.ExcelToMetadata;
+import jp.co.tv.excelmetaforce.converter.MetadataToExcel;
 
 public class FieldData extends SheetData {
     public static final String SHEET_NAME = "項目定義";
     private static final int START_ROW = 7;
     
-    private final CellInfo objFullName = new CellInfo(0, 27, 0);
-
     private final CellInfo isTarget = new CellInfo(0, 0, 0);
     private final CellInfo rowNo = new CellInfo(0, 1, 2);
     private final CellInfo fullName = new CellInfo(0, 3, 7);
@@ -52,22 +50,22 @@ public class FieldData extends SheetData {
     @Override
     public Metadata[] read() {
         ExcelToMetadata converter = new ExcelToMetadata();
-        int tmpRow = START_ROW;
+        int targetRow = START_ROW;
         List<CustomField> fields = new ArrayList<CustomField>();
         
-        while (!excel.isEmpty(tmpRow, fullName.getCol())) {
-            if (excel.isEmpty(tmpRow, isTarget.getCol())) {
-                tmpRow++;
+        while (!excel.isEmpty(targetRow, fullName.getCol())) {
+            if (excel.isEmpty(targetRow, isTarget.getCol())) {
+                targetRow++;
                 continue;
             }
-            updateRow(tmpRow);
+            updateRow(targetRow);
 
             CustomField field = new CustomField();
             
             field.setFullName(excel.getStringValue(fullName));
             field.setLabel(excel.getStringValue(label));
             field.setType(converter.convertType(excel.getStringValue(type)));
-            setLength(field);
+            setLength(field, converter);
             field.setDescription(excel.getStringValue(description));
             field.setInlineHelpText(excel.getStringValue(helpText));
             field.setRequired(excel.getBooleanValue(required));
@@ -84,12 +82,12 @@ public class FieldData extends SheetData {
             field.setWriteRequiresMasterRead(excel.getBooleanValue(wirteByReadAuth));
             field.setReparentableMasterDetail(excel.getBooleanValue(reparentable));
             field.setDefaultValue(excel.getStringValue(defaultValue));
-            setVisibleLines(field);
+            field.setVisibleLines(converter.getVisibleLines(excel.getStringValue(visibleLines)));
             field.setMaskChar(converter.getMaskChar(excel.getStringValue(maskChar)));
             field.setMaskType(converter.getMaskType(excel.getStringValue(maskType)));
             field.setDisplayFormat(excel.getStringValue(displayFormat));
             
-            tmpRow++;
+            targetRow++;
             fields.add(field);
         }
         
@@ -97,7 +95,35 @@ public class FieldData extends SheetData {
     }
 
     @Override
-    public void write(Metadata... metadata) {
+    public void write(Metadata... fields) {
+        MetadataToExcel converter = new MetadataToExcel();
+        int targetRow = START_ROW;
+        int headerRowRange = START_ROW - 1;
+        updateRow(targetRow);
+
+        for (Metadata target : fields) {
+            CustomField field = (CustomField)target;
+            
+            excel.setValue(rowNo, targetRow - headerRowRange);
+            excel.setValue(fullName, field.getFullName());
+            excel.setValue(label, field.getLabel());
+            excel.setValue(type, converter.convertType(field.getType()));
+            writeLength(field, converter);
+            excel.setValue(description, field.getDescription());
+            excel.setValue(helpText, field.getInlineHelpText());
+            excel.setValue(required, field.getRequired());
+            excel.setValue(unique, converter.getUnique(field.getUnique(), field.getCaseSensitive()));
+            excel.setValue(externalId, field.getExternalId());
+            // Todo Picklist sort
+            excel.setValue(globalPicklist, field.getValueSet().getValueSetName());
+            excel.setValue(trackHistory, field.getTrackHistory());
+            excel.setValue(referenceTo, field.getReferenceTo());
+            excel.setValue(relationName, field.getRelationshipName());
+            excel.setValue(relationLabel, field.getRelationshipLabel());
+            excel.setValue(deleteConstraint, converter.getDeleteConstraint(field.getDeleteConstraint()));
+
+            targetRow++;
+        }
     }
 
     @Override
@@ -110,29 +136,24 @@ public class FieldData extends SheetData {
         throw new RuntimeException("not implement");
     }
     
-    private void setLength(CustomField field) {
+    private void setLength(CustomField field, ExcelToMetadata converter) {
         int lengthVal = excel.getNumericValue(length).intValue();
 
-        if (field.getType().equals(FieldType.Number)
-            || field.getType().equals(FieldType.Currency)
-            || field.getType().equals(FieldType.Percent)) {
-
+        if (converter.isNumericType(field.getType())) {
             int scaleVal = excel.getNumericValue(scale).intValue();
-
             field.setPrecision(lengthVal + scaleVal);
             field.setScale(scaleVal);
         } else {
-            if (lengthVal != 0) {
-                field.setLength(lengthVal);
-            }
+            field.setLength(lengthVal); 
         }
     }
     
-    private void setVisibleLines(CustomField field) {
-        if (field.getType().equals(FieldType.LongTextArea)
-             || field.getType().equals(FieldType.MultiselectPicklist)) {
-
-            field.setVisibleLines(excel.getNumericValue(visibleLines).intValue());
+    private void writeLength(CustomField field, MetadataToExcel converter) {
+        if (converter.isNumericType(field.getType())) {
+            excel.setValue(length, field.getPrecision() - field.getScale());
+            excel.setValue(scale, field.getScale());
+        } else {
+            excel.setValueToEmpty(length, field.getLength());
         }
     }
     

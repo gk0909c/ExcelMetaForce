@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
 
+import com.sforce.soap.metadata.CustomField;
+import com.sforce.soap.metadata.DeleteConstraint;
 import com.sforce.soap.metadata.DeploymentStatus;
 import com.sforce.soap.metadata.FieldType;
 import com.sforce.soap.metadata.SharingModel;
@@ -48,5 +50,40 @@ public class MetadataToExcel {
     private String getAssociationValue(String kind, String key) {
         Map<String, String> map = associations.get(kind);
         return map.get(key);
+    }
+
+    public boolean isNumericType(FieldType type) {
+        return FieldType.Number.equals(type)
+                || FieldType.Currency.equals(type)
+                || FieldType.Percent.equals(type);
+    }
+    
+    /**
+     * ○：unique && caseSensitive, △：unique, "": other
+     * 
+     * @param unique unique
+     * @param caseSensitive case sensitive
+     * @return converted
+     */
+    public String getUnique(boolean unique, boolean caseSensitive) {
+        if (unique && caseSensitive) {
+            return "○";
+        } else if (unique) {
+            return "△";
+        } else {
+            return "";
+        }
+    }
+    
+
+    // TODO この辺も全部association.ymlに移す。現在実質2重管理。
+    public String getDeleteConstraint(DeleteConstraint val) {
+        if (DeleteConstraint.SetNull.equals(val)) {
+            return "○";
+        } else if (DeleteConstraint.Restrict.equals(val)) {
+            return "△";
+        } else {
+            return "";
+        }
     }
 }

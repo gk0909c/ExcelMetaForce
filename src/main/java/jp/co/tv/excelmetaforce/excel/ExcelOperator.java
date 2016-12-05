@@ -1,9 +1,12 @@
 package jp.co.tv.excelmetaforce.excel;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 public class ExcelOperator {
     private final Sheet sheet;
@@ -61,8 +64,8 @@ public class ExcelOperator {
      * @param value string
      */
     public void setValue(CellInfo cellInfo, String value) {
-        Cell cell = getCell(cellInfo);
-        cell.setCellValue(value);
+        Function<String, String> func = str -> str;
+        doSetValue(cellInfo, value, func);
     }
 
     /**
@@ -71,8 +74,8 @@ public class ExcelOperator {
      * @param value integer
      */
     public void setValue(CellInfo cellInfo, Integer value) {
-        Cell cell = getCell(cellInfo);
-        cell.setCellValue(value.toString());
+        Function<Integer, String> func = integer -> integer.toString();
+        doSetValue(cellInfo, value, func);
     }
 
     /**
@@ -82,8 +85,8 @@ public class ExcelOperator {
      * @param value boolean
      */
     public void setValue(CellInfo cellInfo, boolean value) {
-        Cell cell = getCell(cellInfo);
-        cell.setCellValue(value ? "○" : "");
+        Function<Boolean, String> func = bool -> bool ? "○" : "";
+        doSetValue(cellInfo, value, func);
     }
 
     /**
@@ -92,8 +95,14 @@ public class ExcelOperator {
      * @param value integer
      */
     public void setValueToEmpty(CellInfo cellInfo, Integer value) {
+        Function<Integer, String> func = integer -> integer == 0 ? "" : integer.toString();
+        doSetValue(cellInfo, value, func);
+    }
+    
+    private <T extends Object> void doSetValue(CellInfo cellInfo, T value, Function<T, String> valueSetter) {
         Cell cell = getCell(cellInfo);
-        cell.setCellValue(value == 0 ? "" : value.toString());
+        cell.setCellValue(valueSetter.apply(value));
+        setStyle(cellInfo);
     }
 
     /**
@@ -111,5 +120,14 @@ public class ExcelOperator {
         if (cell == null) return true;
         
         return StringUtils.isEmpty(cell.getStringCellValue());
+    }
+    
+    private void setStyle(CellInfo cellInfo) {
+        if (cellInfo.getColSpan() != 0) {
+            int row = cellInfo.getRow();
+            int startCol = cellInfo.getCol();
+            int endCol = startCol + cellInfo.getColSpan() - 1;
+            sheet.addMergedRegion(new CellRangeAddress(row, row, startCol, endCol));
+        }
     }
 }

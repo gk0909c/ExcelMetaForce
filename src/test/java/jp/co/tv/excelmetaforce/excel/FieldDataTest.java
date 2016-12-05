@@ -7,7 +7,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import com.sforce.soap.metadata.CustomField;
 import com.sforce.soap.metadata.DeleteConstraint;
@@ -15,8 +17,10 @@ import com.sforce.soap.metadata.EncryptedFieldMaskChar;
 import com.sforce.soap.metadata.EncryptedFieldMaskType;
 import com.sforce.soap.metadata.FieldType;
 
-// TODO this test should be e2e
 public class FieldDataTest {
+    @Rule
+    public ExpectedException notImplement = ExpectedException.none();
+    
     @Test
     public void testRead() {
         Workbook book = new XSSFWorkbook();
@@ -57,7 +61,7 @@ public class FieldDataTest {
     }
     
     @Test
-    public void testWriteAndBaseInfo() {
+    public void testWrite() {
     }
     
     private void writeTestSheet(Sheet fieldSheet) {
@@ -97,5 +101,23 @@ public class FieldDataTest {
         row3.createCell(3).setCellValue("fullname3__c");
         row3.createCell(17).setCellValue("テキスト");
         row3.createCell(23).setCellValue("3");
+    }
+    
+    @Test
+    public void testGetMetadataTypeNotImplement() {
+        Workbook book = new XSSFWorkbook();
+        FieldData data = new FieldData(book);
+
+        notImplement.expect(RuntimeException.class);
+        data.getMetadataType();
+    }
+
+    @Test
+    public void testGetTargetMetadataNotImplement() {
+        Workbook book = new XSSFWorkbook();
+        FieldData data = new FieldData(book);
+
+        notImplement.expect(RuntimeException.class);
+        data.getTargetMetadata();
     }
 }

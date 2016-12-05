@@ -34,7 +34,7 @@ public class ObjectDataTest {
         objectSheet.createRow(27).createCell(10).setCellValue("TestNameField");
         objectSheet.createRow(28).createCell(10).setCellValue("自動採番");
         objectSheet.createRow(29).createCell(10).setCellValue("Test-{00000}");
-        objectSheet.createRow(30).createCell(10).setCellValue(1);
+        objectSheet.createRow(30).createCell(10).setCellValue("1");
 
         ObjectData data = new ObjectData(book);
         CustomObject object = (CustomObject)data.read()[0];
