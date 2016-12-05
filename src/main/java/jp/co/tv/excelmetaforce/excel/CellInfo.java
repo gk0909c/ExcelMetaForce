@@ -1,7 +1,7 @@
 package jp.co.tv.excelmetaforce.excel;
 
 public class CellInfo {
-    private final int row;
+    private int row;
     private final int col;
     private final int colSpan;
     
@@ -28,5 +28,9 @@ public class CellInfo {
 
     public int getColSpan() {
         return colSpan;
+    }
+    
+    public void setRow(int row) {
+        this.row = row;
     }
 }

@@ -7,12 +7,17 @@ import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.apache.commons.lang3.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 
+import com.sforce.soap.metadata.DeleteConstraint;
 import com.sforce.soap.metadata.DeploymentStatus;
+import com.sforce.soap.metadata.EncryptedFieldMaskChar;
+import com.sforce.soap.metadata.EncryptedFieldMaskType;
 import com.sforce.soap.metadata.FieldType;
 import com.sforce.soap.metadata.SharingModel;
+import com.sforce.soap.metadata.ValueSet;
 
 public class ExcelToMetadata {
     private final Map<String, Map<String, String>> associations;
+    private static final String MARU = "○";
     
     /**
      * constructor
@@ -39,7 +44,77 @@ public class ExcelToMetadata {
     }
 
     public DeploymentStatus convertDeployment(String val) {
-        return "○".equals(val) ? DeploymentStatus.Deployed : DeploymentStatus.InDevelopment;
+        return MARU.equals(val) ? DeploymentStatus.Deployed : DeploymentStatus.InDevelopment;
+    }
+    
+    public boolean getUnique(String val) {
+        return StringUtils.isEmpty(val) ? false : true;
+    }
+
+    public boolean getCaseSensitive(String val) {
+        return MARU.equals(val) ? true : false;
+    }
+    
+    /**
+     * if global picklist set, return it;
+     * 
+     * @param val global picklist name
+     * @return global picklist
+     */
+    public ValueSet getGlobalPick(String val) {
+        if (StringUtils.isEmpty(val)) return null;
+        
+        ValueSet valueSet = new ValueSet();
+        valueSet.setValueSetName(val);
+        
+        return valueSet;
+    }
+    
+    /**
+     * ○ to setnull, ×, restrict
+     * 
+     * @param val value on excel
+     * @return metadata value
+     */
+    public DeleteConstraint deleteConstraint(String val) {
+        if (MARU.equals(val)) {
+            return DeleteConstraint.SetNull;
+        } else if ("×".equals(val)) {
+            return DeleteConstraint.Restrict;
+        }
+        
+        return null;
+    }
+    
+    /**
+     * convert mask char(* or X)
+     * 
+     * @param val value on excel
+     * @return metadata value
+     */
+    public EncryptedFieldMaskChar getMaskChar(String val) {
+        if ("*".equals(val)) {
+            return EncryptedFieldMaskChar.asterisk;
+        } else if ("X".equals(val)) {
+            return EncryptedFieldMaskChar.X;
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * convert mask type
+     * 
+     * @param val value on excel
+     * @return metadata value
+     */
+    public EncryptedFieldMaskType getMaskType(String val) {
+        if (StringUtils.isEmpty(val)) {
+            return null;
+        }
+
+        String key = getAssociationKey("maskType", val);
+        return EncryptedFieldMaskType.valueOf(key);
     }
     
     /**

@@ -1,5 +1,6 @@
 package jp.co.tv.excelmetaforce.excel;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -26,7 +27,7 @@ public class ExcelOperator {
      * @return string value
      */
     public Number getNumericValue(CellInfo cellInfo) {
-        return getCell(cellInfo).getNumericCellValue(); 
+        return Integer.parseInt(getCell(cellInfo).getStringCellValue()); 
     }
 
     /**
@@ -95,4 +96,20 @@ public class ExcelOperator {
         cell.setCellValue(value == 0 ? "" : value.toString());
     }
 
+    /**
+     * return true if target cell is null or empty.
+     * 
+     * @param rowNum row number 
+     * @param colNum column number
+     * @return whether target cell is empty
+     */
+    public boolean isEmpty(int rowNum, int colNum) {
+        Row row = sheet.getRow(rowNum);
+        if (row == null) return true;
+        
+        Cell cell = row.getCell(colNum);
+        if (cell == null) return true;
+        
+        return StringUtils.isEmpty(cell.getStringCellValue());
+    }
 }
