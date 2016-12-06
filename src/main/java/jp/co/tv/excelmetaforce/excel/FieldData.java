@@ -34,7 +34,7 @@ public class FieldData extends SheetData {
     private final CellInfo relationName = new CellInfo(0, 78, 7);
     private final CellInfo relationLabel = new CellInfo(0, 85, 7);
     private final CellInfo deleteConstraint = new CellInfo(0, 92, 7);
-    private final CellInfo wirteByReadAuth = new CellInfo(0, 96, 4);
+    private final CellInfo writeByReadAuth = new CellInfo(0, 96, 4);
     private final CellInfo reparentable = new CellInfo(0, 100, 4);
     private final CellInfo defaultValue = new CellInfo(0, 104, 4);
     private final CellInfo visibleLines = new CellInfo(0, 111, 7);
@@ -79,7 +79,7 @@ public class FieldData extends SheetData {
             field.setRelationshipName(excel.getStringValue(relationName));
             field.setRelationshipLabel(excel.getStringValue(relationLabel));
             field.setDeleteConstraint(converter.deleteConstraint(excel.getStringValue(deleteConstraint)));
-            field.setWriteRequiresMasterRead(excel.getBooleanValue(wirteByReadAuth));
+            field.setWriteRequiresMasterRead(excel.getBooleanValue(writeByReadAuth));
             field.setReparentableMasterDetail(excel.getBooleanValue(reparentable));
             field.setDefaultValue(excel.getStringValue(defaultValue));
             field.setVisibleLines(converter.getVisibleLines(excel.getStringValue(visibleLines)));
@@ -121,6 +121,14 @@ public class FieldData extends SheetData {
             excel.setValue(relationName, field.getRelationshipName());
             excel.setValue(relationLabel, field.getRelationshipLabel());
             excel.setValue(deleteConstraint, converter.getDeleteConstraint(field.getDeleteConstraint()));
+            excel.setValue(writeByReadAuth, field.getWriteRequiresMasterRead());
+            excel.setValue(reparentable, field.getReparentableMasterDetail());
+            excel.setValue(defaultValue, field.getDefaultValue());
+            excel.setValue(visibleLines, field.getVisibleLines());
+            excel.setValue(maskChar, converter.convertMaskChar(field.getMaskChar()));
+            excel.setValue(maskType, converter.convertMaskType(field.getMaskType()));
+            excel.setValue(displayFormat, field.getDisplayFormat());
+
 
             targetRow++;
         }

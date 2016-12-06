@@ -16,6 +16,8 @@ import com.sforce.soap.metadata.DeleteConstraint;
 import com.sforce.soap.metadata.EncryptedFieldMaskChar;
 import com.sforce.soap.metadata.EncryptedFieldMaskType;
 import com.sforce.soap.metadata.FieldType;
+import com.sforce.soap.metadata.Metadata;
+import com.sforce.soap.metadata.ValueSet;
 
 public class FieldDataTest {
     @Rule
@@ -62,6 +64,18 @@ public class FieldDataTest {
     
     @Test
     public void testWrite() {
+        CustomField field1 = createBaseField("field1__c");
+        CustomField field2 = createBaseField("field1__c");
+        field2.setType(FieldType.Number);
+        field2.setPrecision(3);
+        field2.setScale(2);
+
+        Workbook book = new XSSFWorkbook();
+        Sheet fieldSheet = book.createSheet(FieldData.SHEET_NAME);
+        FieldData data = new FieldData(book);
+        data.write(new Metadata[]{field1, field2});
+        
+        // Todo continue from here 
     }
     
     private void writeTestSheet(Sheet fieldSheet) {
@@ -101,6 +115,39 @@ public class FieldDataTest {
         row3.createCell(3).setCellValue("fullname3__c");
         row3.createCell(17).setCellValue("テキスト");
         row3.createCell(23).setCellValue("3");
+    }
+    
+    private CustomField createBaseField(String fullName) {
+        CustomField baseField = new CustomField();
+        
+        baseField.setFullName(fullName);
+        baseField.setLabel("field label");
+        baseField.setType(FieldType.Text);
+        baseField.setLength(3);
+        baseField.setDescription("field description");
+        baseField.setInlineHelpText("help text");
+        baseField.setRequired(true);
+        baseField.setUnique(true);
+        baseField.setCaseSensitive(false);
+        baseField.setExternalId(false);
+        // TODO set sort picklist
+        ValueSet globalPicklist = new ValueSet();
+        globalPicklist.setValueSetName("globalPicklist");
+        baseField.setValueSet(globalPicklist);
+        baseField.setTrackFeedHistory(true);
+        baseField.setReferenceTo("Reference__c");
+        baseField.setRelationshipName("RelationName");
+        baseField.setRelationshipLabel("RelationLabel");
+        baseField.setDeleteConstraint(DeleteConstraint.SetNull);
+        baseField.setWriteRequiresMasterRead(false);
+        baseField.setReparentableMasterDetail(false);
+        baseField.setDefaultValue("default");
+        baseField.setVisibleLines(0);
+        baseField.setMaskChar(EncryptedFieldMaskChar.X);
+        baseField.setMaskType(EncryptedFieldMaskType.all);
+        baseField.setDisplayFormat("format");
+        
+        return baseField;
     }
     
     @Test

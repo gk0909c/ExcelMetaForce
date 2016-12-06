@@ -7,6 +7,8 @@ import org.yaml.snakeyaml.Yaml;
 import com.sforce.soap.metadata.CustomField;
 import com.sforce.soap.metadata.DeleteConstraint;
 import com.sforce.soap.metadata.DeploymentStatus;
+import com.sforce.soap.metadata.EncryptedFieldMaskChar;
+import com.sforce.soap.metadata.EncryptedFieldMaskType;
 import com.sforce.soap.metadata.FieldType;
 import com.sforce.soap.metadata.SharingModel;
 
@@ -45,6 +47,14 @@ public class MetadataToExcel {
      */
     public String convertType(FieldType val) {
         return getAssociationValue("fieldType", val.name());
+    }
+
+    public String convertMaskChar(EncryptedFieldMaskChar val) {
+        return getAssociationValue("maskChar", val.name());
+    }
+
+    public String convertMaskType(EncryptedFieldMaskType val) {
+        return getAssociationValue("maskType", val.name());
     }
 
     private String getAssociationValue(String kind, String key) {

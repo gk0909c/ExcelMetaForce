@@ -17,6 +17,9 @@ fieldType:
   Phone: 電話
   Url: URL
   MultiselectPicklist: 複数選択リスト
+maskChar:
+  astarisk: "*"
+  X: X
 maskType:
   all: 全ての文字をマスク
   lastFour: 最後の4桁を表示
