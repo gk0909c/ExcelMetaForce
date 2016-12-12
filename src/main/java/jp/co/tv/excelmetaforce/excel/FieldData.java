@@ -65,7 +65,7 @@ public class FieldData extends SheetData {
             
             field.setFullName(excel.getStringValue(fullName));
             field.setLabel(excel.getStringValue(label));
-            field.setType(converter.convertType(excel.getStringValue(type)));
+            field.setType(converter.convFieldType(excel.getStringValue(type)));
             setLength(field, converter);
             field.setDescription(excel.getStringValue(description));
             field.setInlineHelpText(excel.getStringValue(helpText));
@@ -78,13 +78,13 @@ public class FieldData extends SheetData {
             field.setReferenceTo(excel.getStringValue(referenceTo));
             field.setRelationshipName(excel.getStringValue(relationName));
             field.setRelationshipLabel(excel.getStringValue(relationLabel));
-            field.setDeleteConstraint(converter.deleteConstraint(excel.getStringValue(deleteConstraint)));
+            field.setDeleteConstraint(converter.convDeleteConstraint(excel.getStringValue(deleteConstraint)));
             field.setWriteRequiresMasterRead(excel.getBooleanValue(writeByReadAuth));
             field.setReparentableMasterDetail(excel.getBooleanValue(reparentable));
             field.setDefaultValue(excel.getStringValue(defaultValue));
             field.setVisibleLines(converter.getVisibleLines(excel.getStringValue(visibleLines)));
-            field.setMaskChar(converter.getMaskChar(excel.getStringValue(maskChar)));
-            field.setMaskType(converter.getMaskType(excel.getStringValue(maskType)));
+            field.setMaskChar(converter.convMaskChar(excel.getStringValue(maskChar)));
+            field.setMaskType(converter.convMaskType(excel.getStringValue(maskType)));
             field.setDisplayFormat(excel.getStringValue(displayFormat));
             
             targetRow++;
@@ -107,7 +107,7 @@ public class FieldData extends SheetData {
             excel.setValue(rowNo, targetRow - headerRowRange);
             excel.setValue(fullName, field.getFullName());
             excel.setValue(label, field.getLabel());
-            excel.setValue(type, converter.convertType(field.getType()));
+            excel.setValue(type, converter.convFieldType(field.getType()));
             writeLength(field, converter);
             excel.setValue(description, field.getDescription());
             excel.setValue(helpText, field.getInlineHelpText());
@@ -120,13 +120,13 @@ public class FieldData extends SheetData {
             excel.setValue(referenceTo, field.getReferenceTo());
             excel.setValue(relationName, field.getRelationshipName());
             excel.setValue(relationLabel, field.getRelationshipLabel());
-            excel.setValue(deleteConstraint, converter.getDeleteConstraint(field.getDeleteConstraint()));
+            excel.setValue(deleteConstraint, converter.convDeleteConstraint(field.getDeleteConstraint()));
             excel.setValue(writeByReadAuth, field.getWriteRequiresMasterRead());
             excel.setValue(reparentable, field.getReparentableMasterDetail());
             excel.setValue(defaultValue, field.getDefaultValue());
             excel.setValueToEmpty(visibleLines, field.getVisibleLines());
-            excel.setValue(maskChar, converter.convertMaskChar(field.getMaskChar()));
-            excel.setValue(maskType, converter.convertMaskType(field.getMaskType()));
+            excel.setValue(maskChar, converter.convMaskChar(field.getMaskChar()));
+            excel.setValue(maskType, converter.convMaskType(field.getMaskType()));
             excel.setValue(displayFormat, field.getDisplayFormat());
 
 

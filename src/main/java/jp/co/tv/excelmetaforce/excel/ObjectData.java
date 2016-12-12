@@ -46,13 +46,13 @@ public class ObjectData extends SheetData {
         object.setEnableActivities(excel.getBooleanValue(activity));
         object.setAllowInChatterGroups(excel.getBooleanValue(chatter));
         object.setEnableHistory(excel.getBooleanValue(history));
-        object.setSharingModel(converter.convertSharingModel(excel.getStringValue(share)));
-        object.setDeploymentStatus(converter.convertDeployment(excel.getStringValue(deploy)));
+        object.setSharingModel(converter.convSharingModel(excel.getStringValue(share)));
+        object.setDeploymentStatus(converter.convDeploymentStatus(excel.getStringValue(deploy)));
         object.setEnableSearch(excel.getBooleanValue(search));
 
         CustomField nameField = new CustomField();
         nameField.setLabel(excel.getStringValue(nameLabel));
-        nameField.setType(converter.convertType(excel.getStringValue(type)));
+        nameField.setType(converter.convFieldType(excel.getStringValue(type)));
         nameField.setDisplayFormat(excel.getStringValue(format));
         nameField.setStartingNumber(excel.getNumericValue(startNum).intValue());
 
@@ -71,13 +71,13 @@ public class ObjectData extends SheetData {
         excel.setValue(activity, object.getEnableActivities());
         excel.setValue(chatter, object.getAllowInChatterGroups());
         excel.setValue(history, object.getEnableHistory());
-        excel.setValue(share, converter.convertSharingModel(object.getSharingModel()));
-        excel.setValue(deploy, converter.convertDeployment(object.getDeploymentStatus()));
+        excel.setValue(share, converter.convSharingModel(object.getSharingModel()));
+        excel.setValue(deploy, converter.convDeploymentStatus(object.getDeploymentStatus()));
         excel.setValue(search, object.getEnableSearch());
         
         CustomField name = object.getNameField();
         excel.setValue(nameLabel, name.getLabel());
-        excel.setValue(type, converter.convertType(name.getType()));
+        excel.setValue(type, converter.convFieldType(name.getType()));
         excel.setValue(format, name.getDisplayFormat());
         excel.setValueToEmpty(startNum, name.getStartingNumber());
     }

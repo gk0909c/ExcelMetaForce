@@ -1,3 +1,9 @@
+deleteConstraint:
+  SetNull: ○
+  Restrict: ×
+deploymentStatus:
+  Deployed: リリース済
+  InDevelopment: 開発中
 fieldType:
   Text: テキスト
   AutoNumber: 自動採番
@@ -32,5 +38,4 @@ sharingModel:
   ReadWrite: 公開（更新可能）
   Read: 公開（参照のみ）
   ControlledByParent: 親レコードに連動
-  FullAccess: ""
    

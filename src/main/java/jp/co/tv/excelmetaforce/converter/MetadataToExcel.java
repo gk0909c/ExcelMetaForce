@@ -1,8 +1,6 @@
 package jp.co.tv.excelmetaforce.converter;
 
-import java.util.Map;
-
-import org.yaml.snakeyaml.Yaml;
+import org.apache.commons.lang3.StringUtils;
 
 import com.sforce.soap.metadata.DeleteConstraint;
 import com.sforce.soap.metadata.DeploymentStatus;
@@ -11,49 +9,39 @@ import com.sforce.soap.metadata.EncryptedFieldMaskType;
 import com.sforce.soap.metadata.FieldType;
 import com.sforce.soap.metadata.SharingModel;
 
-// TODO Converterの共通部分は別クラスに以上する
-public class MetadataToExcel {
-    private final Map<String, Map<String, String>> associations;
-    
+public class MetadataToExcel extends BaseConverter {
+
     /**
-     * constructor
+     * if null, return empty. others, depend on mapping.
+     * 
+     * @param val delete constraint
+     * @return value on excel
      */
-    @SuppressWarnings("unchecked")
-    public MetadataToExcel() {
-        Yaml yaml = new Yaml(); 
-        associations = yaml.loadAs(ClassLoader.getSystemResourceAsStream("association.yml"), Map.class);
+    public String convDeleteConstraint(DeleteConstraint val) {
+        if (val == null) return StringUtils.EMPTY;
+        return getMappingValue(DELETE_CONSTRAINT, val.name());
     }
 
-    public String convertSharingModel(SharingModel val) {
-        return getAssociationValue("sharingModel", val.name());
+    public String convDeploymentStatus(DeploymentStatus val) {
+        return getMappingValue(DEPLOYMENT_STATUS, val.name());
     }
 
-    public String convertDeployment(DeploymentStatus val) {
-        return DeploymentStatus.Deployed.equals(val) ? "○" : "";
+    public String convFieldType(FieldType val) {
+        return getMappingValue(FIELD_TYPE, val.name());
     }
 
-    public String convertType(FieldType val) {
-        return getAssociationValue("fieldType", val.name());
+    public String convMaskChar(EncryptedFieldMaskChar val) {
+        return getMappingValue(MASK_CHAR, val.name());
     }
 
-    public String convertMaskChar(EncryptedFieldMaskChar val) {
-        return getAssociationValue("maskChar", val.name());
+    public String convMaskType(EncryptedFieldMaskType val) {
+        return getMappingValue(MASK_TYPE, val.name());
     }
 
-    public String convertMaskType(EncryptedFieldMaskType val) {
-        return getAssociationValue("maskType", val.name());
+    public String convSharingModel(SharingModel val) {
+        return getMappingValue(SHARING_MODEL, val.name());
     }
 
-    private String getAssociationValue(String kind, String key) {
-        Map<String, String> map = associations.get(kind);
-        return map.get(key);
-    }
-
-    public boolean isNumericType(FieldType type) {
-        return FieldType.Number.equals(type)
-                || FieldType.Currency.equals(type)
-                || FieldType.Percent.equals(type);
-    }
     
     /**
      * ○：unique && caseSensitive, △：unique, "": other
@@ -64,23 +52,11 @@ public class MetadataToExcel {
      */
     public String getUnique(boolean unique, boolean caseSensitive) {
         if (unique && caseSensitive) {
-            return "○";
+            return MARU;
         } else if (unique) {
-            return "△";
+            return SANKAKU;
         } else {
-            return "";
-        }
-    }
-    
-
-    // TODO この辺も全部association.ymlに移す。現在実質2重管理。
-    public String getDeleteConstraint(DeleteConstraint val) {
-        if (DeleteConstraint.SetNull.equals(val)) {
-            return "○";
-        } else if (DeleteConstraint.Restrict.equals(val)) {
-            return "×";
-        } else {
-            return "";
+            return StringUtils.EMPTY;
         }
     }
 }

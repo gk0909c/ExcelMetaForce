@@ -27,39 +27,39 @@ public class ExcelToMetadataTest {
 
     @Test
     public void testConvertFieldType() {
-        assertThat(converter.convertType("テキスト"), is(FieldType.Text));
-        assertThat(converter.convertType("自動採番"), is(FieldType.AutoNumber));
-        assertThat(converter.convertType("数値"), is(FieldType.Number));
-        assertThat(converter.convertType("日付"), is(FieldType.Date));
-        assertThat(converter.convertType("日付／時間"), is(FieldType.DateTime));
-        assertThat(converter.convertType("選択リスト"), is(FieldType.Picklist));
-        assertThat(converter.convertType("参照関係"), is(FieldType.Lookup));
-        assertThat(converter.convertType("主従関係"), is(FieldType.MasterDetail));
-        assertThat(converter.convertType("チェックボックス"), is(FieldType.Checkbox));
-        assertThat(converter.convertType("テキスト（暗号化）"), is(FieldType.EncryptedText));
-        assertThat(converter.convertType("テキストエリア"), is(FieldType.TextArea));
-        assertThat(converter.convertType("ロングテキストエリア"), is(FieldType.LongTextArea));
-        assertThat(converter.convertType("パーセント"), is(FieldType.Percent));
-        assertThat(converter.convertType("通貨"), is(FieldType.Currency));
-        assertThat(converter.convertType("メール"), is(FieldType.Email));
-        assertThat(converter.convertType("電話"), is(FieldType.Phone));
-        assertThat(converter.convertType("URL"), is(FieldType.Url));
-        assertThat(converter.convertType("複数選択リスト"), is(FieldType.MultiselectPicklist));
+        assertThat(converter.convFieldType("テキスト"), is(FieldType.Text));
+        assertThat(converter.convFieldType("自動採番"), is(FieldType.AutoNumber));
+        assertThat(converter.convFieldType("数値"), is(FieldType.Number));
+        assertThat(converter.convFieldType("日付"), is(FieldType.Date));
+        assertThat(converter.convFieldType("日付／時間"), is(FieldType.DateTime));
+        assertThat(converter.convFieldType("選択リスト"), is(FieldType.Picklist));
+        assertThat(converter.convFieldType("参照関係"), is(FieldType.Lookup));
+        assertThat(converter.convFieldType("主従関係"), is(FieldType.MasterDetail));
+        assertThat(converter.convFieldType("チェックボックス"), is(FieldType.Checkbox));
+        assertThat(converter.convFieldType("テキスト（暗号化）"), is(FieldType.EncryptedText));
+        assertThat(converter.convFieldType("テキストエリア"), is(FieldType.TextArea));
+        assertThat(converter.convFieldType("ロングテキストエリア"), is(FieldType.LongTextArea));
+        assertThat(converter.convFieldType("パーセント"), is(FieldType.Percent));
+        assertThat(converter.convFieldType("通貨"), is(FieldType.Currency));
+        assertThat(converter.convFieldType("メール"), is(FieldType.Email));
+        assertThat(converter.convFieldType("電話"), is(FieldType.Phone));
+        assertThat(converter.convFieldType("URL"), is(FieldType.Url));
+        assertThat(converter.convFieldType("複数選択リスト"), is(FieldType.MultiselectPicklist));
     }
 
     @Test
     public void testConvertSharingModel() {
-        assertThat(converter.convertSharingModel("非公開"), is(SharingModel.Private));
-        assertThat(converter.convertSharingModel("公開（更新可能）"), is(SharingModel.ReadWrite));
-        assertThat(converter.convertSharingModel("公開（参照のみ）"), is(SharingModel.Read));
-        assertThat(converter.convertSharingModel("親レコードに連動"), is(SharingModel.ControlledByParent));
-        assertThat(converter.convertSharingModel(""), is(SharingModel.FullAccess));
+        assertThat(converter.convSharingModel("非公開"), is(SharingModel.Private));
+        assertThat(converter.convSharingModel("公開（更新可能）"), is(SharingModel.ReadWrite));
+        assertThat(converter.convSharingModel("公開（参照のみ）"), is(SharingModel.Read));
+        assertThat(converter.convSharingModel("親レコードに連動"), is(SharingModel.ControlledByParent));
+        assertThat(converter.convSharingModel(""), nullValue());
     }
 
     @Test
     public void testConvertDeployment() {
-        assertThat(converter.convertDeployment("○"), is(DeploymentStatus.Deployed));
-        assertThat(converter.convertDeployment(null), is(DeploymentStatus.InDevelopment));
+        assertThat(converter.convDeploymentStatus("リリース済"), is(DeploymentStatus.Deployed));
+        assertThat(converter.convDeploymentStatus("開発中"), is(DeploymentStatus.InDevelopment));
     }
 
     @Test
@@ -86,27 +86,27 @@ public class ExcelToMetadataTest {
 
     @Test
     public void testDeleteConstraint() {
-        assertThat(converter.deleteConstraint("○"), is(DeleteConstraint.SetNull));
-        assertThat(converter.deleteConstraint("×"), is(DeleteConstraint.Restrict));
-        assertThat(converter.deleteConstraint(""), nullValue());
+        assertThat(converter.convDeleteConstraint("○"), is(DeleteConstraint.SetNull));
+        assertThat(converter.convDeleteConstraint("×"), is(DeleteConstraint.Restrict));
+        assertThat(converter.convDeleteConstraint(""), nullValue());
     }
 
     @Test
     public void testEncryptedFieldChar() {
-        assertThat(converter.getMaskChar("*"), is(EncryptedFieldMaskChar.asterisk));
-        assertThat(converter.getMaskChar("X"), is(EncryptedFieldMaskChar.X));
-        assertThat(converter.getMaskChar(""), nullValue());
+        assertThat(converter.convMaskChar("*"), is(EncryptedFieldMaskChar.asterisk));
+        assertThat(converter.convMaskChar("X"), is(EncryptedFieldMaskChar.X));
+        assertThat(converter.convMaskChar(""), nullValue());
     }
 
     @Test
     public void testEncryptedFieldType() {
-        assertThat(converter.getMaskType("全ての文字をマスク"), is(EncryptedFieldMaskType.all));
-        assertThat(converter.getMaskType("最後の4桁を表示"), is(EncryptedFieldMaskType.lastFour));
-        assertThat(converter.getMaskType("クレジットカード番号"), is(EncryptedFieldMaskType.creditCard));
-        assertThat(converter.getMaskType("国民保険番号"), is(EncryptedFieldMaskType.nino));
-        assertThat(converter.getMaskType("社会保障番号"), is(EncryptedFieldMaskType.ssn));
-        assertThat(converter.getMaskType("社会保険番号"), is(EncryptedFieldMaskType.sin));
-        assertThat(converter.getMaskType(""), nullValue());
+        assertThat(converter.convMaskType("全ての文字をマスク"), is(EncryptedFieldMaskType.all));
+        assertThat(converter.convMaskType("最後の4桁を表示"), is(EncryptedFieldMaskType.lastFour));
+        assertThat(converter.convMaskType("クレジットカード番号"), is(EncryptedFieldMaskType.creditCard));
+        assertThat(converter.convMaskType("国民保険番号"), is(EncryptedFieldMaskType.nino));
+        assertThat(converter.convMaskType("社会保障番号"), is(EncryptedFieldMaskType.ssn));
+        assertThat(converter.convMaskType("社会保険番号"), is(EncryptedFieldMaskType.sin));
+        assertThat(converter.convMaskType(""), nullValue());
     }
 
     @Test

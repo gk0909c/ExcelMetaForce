@@ -26,55 +26,54 @@ public class MetadataToExcelTest {
 
     @Test
     public void testConvertSharingModel() {
-        assertThat(converter.convertSharingModel(SharingModel.Private), is("非公開"));
-        assertThat(converter.convertSharingModel(SharingModel.ReadWrite), is("公開（更新可能）"));
-        assertThat(converter.convertSharingModel(SharingModel.Read), is("公開（参照のみ）"));
-        assertThat(converter.convertSharingModel(SharingModel.ControlledByParent), is("親レコードに連動"));
-        assertThat(converter.convertSharingModel(SharingModel.FullAccess), is(""));
+        assertThat(converter.convSharingModel(SharingModel.Private), is("非公開"));
+        assertThat(converter.convSharingModel(SharingModel.ReadWrite), is("公開（更新可能）"));
+        assertThat(converter.convSharingModel(SharingModel.Read), is("公開（参照のみ）"));
+        assertThat(converter.convSharingModel(SharingModel.ControlledByParent), is("親レコードに連動"));
     }
 
     @Test
     public void testConvertDeployment() {
-        assertThat(converter.convertDeployment(DeploymentStatus.Deployed), is("○"));
-        assertThat(converter.convertDeployment(DeploymentStatus.InDevelopment), is(""));
+        assertThat(converter.convDeploymentStatus(DeploymentStatus.Deployed), is("リリース済"));
+        assertThat(converter.convDeploymentStatus(DeploymentStatus.InDevelopment), is("開発中"));
     }
 
     @Test
     public void testConvertFieldType() {
-        assertThat(converter.convertType(FieldType.Text), is("テキスト"));
-        assertThat(converter.convertType(FieldType.AutoNumber), is("自動採番"));
-        assertThat(converter.convertType(FieldType.Number), is("数値"));
-        assertThat(converter.convertType(FieldType.Date), is("日付"));
-        assertThat(converter.convertType(FieldType.DateTime), is("日付／時間"));
-        assertThat(converter.convertType(FieldType.Picklist), is("選択リスト"));
-        assertThat(converter.convertType(FieldType.Lookup), is("参照関係"));
-        assertThat(converter.convertType(FieldType.MasterDetail), is("主従関係"));
-        assertThat(converter.convertType(FieldType.Checkbox), is("チェックボックス"));
-        assertThat(converter.convertType(FieldType.EncryptedText), is("テキスト（暗号化）"));
-        assertThat(converter.convertType(FieldType.TextArea), is("テキストエリア"));
-        assertThat(converter.convertType(FieldType.LongTextArea), is("ロングテキストエリア"));
-        assertThat(converter.convertType(FieldType.Percent), is("パーセント"));
-        assertThat(converter.convertType(FieldType.Currency), is("通貨"));
-        assertThat(converter.convertType(FieldType.Email), is("メール"));
-        assertThat(converter.convertType(FieldType.Phone), is("電話"));
-        assertThat(converter.convertType(FieldType.Url), is("URL"));
-        assertThat(converter.convertType(FieldType.MultiselectPicklist), is("複数選択リスト"));
+        assertThat(converter.convFieldType(FieldType.Text), is("テキスト"));
+        assertThat(converter.convFieldType(FieldType.AutoNumber), is("自動採番"));
+        assertThat(converter.convFieldType(FieldType.Number), is("数値"));
+        assertThat(converter.convFieldType(FieldType.Date), is("日付"));
+        assertThat(converter.convFieldType(FieldType.DateTime), is("日付／時間"));
+        assertThat(converter.convFieldType(FieldType.Picklist), is("選択リスト"));
+        assertThat(converter.convFieldType(FieldType.Lookup), is("参照関係"));
+        assertThat(converter.convFieldType(FieldType.MasterDetail), is("主従関係"));
+        assertThat(converter.convFieldType(FieldType.Checkbox), is("チェックボックス"));
+        assertThat(converter.convFieldType(FieldType.EncryptedText), is("テキスト（暗号化）"));
+        assertThat(converter.convFieldType(FieldType.TextArea), is("テキストエリア"));
+        assertThat(converter.convFieldType(FieldType.LongTextArea), is("ロングテキストエリア"));
+        assertThat(converter.convFieldType(FieldType.Percent), is("パーセント"));
+        assertThat(converter.convFieldType(FieldType.Currency), is("通貨"));
+        assertThat(converter.convFieldType(FieldType.Email), is("メール"));
+        assertThat(converter.convFieldType(FieldType.Phone), is("電話"));
+        assertThat(converter.convFieldType(FieldType.Url), is("URL"));
+        assertThat(converter.convFieldType(FieldType.MultiselectPicklist), is("複数選択リスト"));
     }
 
     @Test
     public void testEncryptedFieldChar() {
-        assertThat(converter.convertMaskChar(EncryptedFieldMaskChar.asterisk), is("*"));
-        assertThat(converter.convertMaskChar(EncryptedFieldMaskChar.X), is("X"));
+        assertThat(converter.convMaskChar(EncryptedFieldMaskChar.asterisk), is("*"));
+        assertThat(converter.convMaskChar(EncryptedFieldMaskChar.X), is("X"));
     }
 
     @Test
     public void testEncryptedFieldType() {
-        assertThat(converter.convertMaskType(EncryptedFieldMaskType.all), is("全ての文字をマスク"));
-        assertThat(converter.convertMaskType(EncryptedFieldMaskType.lastFour), is("最後の4桁を表示"));
-        assertThat(converter.convertMaskType(EncryptedFieldMaskType.creditCard), is("クレジットカード番号"));
-        assertThat(converter.convertMaskType(EncryptedFieldMaskType.nino), is("国民保険番号"));
-        assertThat(converter.convertMaskType(EncryptedFieldMaskType.ssn), is("社会保障番号"));
-        assertThat(converter.convertMaskType(EncryptedFieldMaskType.sin), is("社会保険番号"));
+        assertThat(converter.convMaskType(EncryptedFieldMaskType.all), is("全ての文字をマスク"));
+        assertThat(converter.convMaskType(EncryptedFieldMaskType.lastFour), is("最後の4桁を表示"));
+        assertThat(converter.convMaskType(EncryptedFieldMaskType.creditCard), is("クレジットカード番号"));
+        assertThat(converter.convMaskType(EncryptedFieldMaskType.nino), is("国民保険番号"));
+        assertThat(converter.convMaskType(EncryptedFieldMaskType.ssn), is("社会保障番号"));
+        assertThat(converter.convMaskType(EncryptedFieldMaskType.sin), is("社会保険番号"));
     }
 
     @Test
@@ -86,9 +85,9 @@ public class MetadataToExcelTest {
 
     @Test
     public void testDeleteConstraint() {
-        assertThat(converter.getDeleteConstraint(DeleteConstraint.SetNull), is("○"));
-        assertThat(converter.getDeleteConstraint(DeleteConstraint.Restrict), is("×"));
-        assertThat(converter.getDeleteConstraint(null), is(""));
+        assertThat(converter.convDeleteConstraint(DeleteConstraint.SetNull), is("○"));
+        assertThat(converter.convDeleteConstraint(DeleteConstraint.Restrict), is("×"));
+        assertThat(converter.convDeleteConstraint(null), is(""));
     }
 
     @Test
