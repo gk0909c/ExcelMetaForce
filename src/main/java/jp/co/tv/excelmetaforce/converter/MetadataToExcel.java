@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
 
-import com.sforce.soap.metadata.CustomField;
 import com.sforce.soap.metadata.DeleteConstraint;
 import com.sforce.soap.metadata.DeploymentStatus;
 import com.sforce.soap.metadata.EncryptedFieldMaskChar;
@@ -25,12 +24,6 @@ public class MetadataToExcel {
         associations = yaml.loadAs(ClassLoader.getSystemResourceAsStream("association.yml"), Map.class);
     }
 
-    /**
-     * convert sharing model for read sfdc
-     * 
-     * @param val sharing model
-     * @return string
-     */
     public String convertSharingModel(SharingModel val) {
         return getAssociationValue("sharingModel", val.name());
     }
@@ -39,12 +32,6 @@ public class MetadataToExcel {
         return DeploymentStatus.Deployed.equals(val) ? "○" : "";
     }
 
-    /**
-     * convert field type for read sfdc
-     * 
-     * @param val field type
-     * @return field type string
-     */
     public String convertType(FieldType val) {
         return getAssociationValue("fieldType", val.name());
     }
@@ -91,7 +78,7 @@ public class MetadataToExcel {
         if (DeleteConstraint.SetNull.equals(val)) {
             return "○";
         } else if (DeleteConstraint.Restrict.equals(val)) {
-            return "△";
+            return "×";
         } else {
             return "";
         }

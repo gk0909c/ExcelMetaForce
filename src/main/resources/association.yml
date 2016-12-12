@@ -8,7 +8,7 @@ fieldType:
   Lookup: 参照関係
   MasterDetail: 主従関係
   Checkbox: チェックボックス
-  EncryptedText: テキスト(暗号化)
+  EncryptedText: テキスト（暗号化）
   TextArea: テキストエリア
   LongTextArea: ロングテキストエリア
   Percent: パーセント
@@ -18,7 +18,7 @@ fieldType:
   Url: URL
   MultiselectPicklist: 複数選択リスト
 maskChar:
-  astarisk: "*"
+  asterisk: "*"
   X: X
 maskType:
   all: 全ての文字をマスク
@@ -32,5 +32,5 @@ sharingModel:
   ReadWrite: 公開（更新可能）
   Read: 公開（参照のみ）
   ControlledByParent: 親レコードに連動
-  FullAccess: 
+  FullAccess: ""
    

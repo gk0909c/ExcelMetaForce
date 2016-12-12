@@ -64,8 +64,8 @@ public class FieldDataTest {
     
     @Test
     public void testWrite() {
-        CustomField field1 = createBaseField("field1__c");
-        CustomField field2 = createBaseField("field1__c");
+        final CustomField field1 = createBaseField("field1__c");
+        final CustomField field2 = createBaseField("field1__c");
         field2.setType(FieldType.Number);
         field2.setPrecision(3);
         field2.setScale(2);
@@ -76,6 +76,30 @@ public class FieldDataTest {
         data.write(new Metadata[]{field1, field2});
         
         // TODO continue from here 
+        assertThat(fieldSheet.getRow(7).getCell(1).getStringCellValue(), is("1"));
+        assertThat(fieldSheet.getRow(7).getCell(3).getStringCellValue(), is("field1__c"));
+        assertThat(fieldSheet.getRow(7).getCell(10).getStringCellValue(), is("field label"));
+        assertThat(fieldSheet.getRow(7).getCell(17).getStringCellValue(), is("テキスト"));
+        assertThat(fieldSheet.getRow(7).getCell(23).getStringCellValue(), is("3"));
+        assertThat(fieldSheet.getRow(7).getCell(26).getStringCellValue(), is(""));
+        assertThat(fieldSheet.getRow(7).getCell(28).getStringCellValue(), is("field description"));
+        assertThat(fieldSheet.getRow(7).getCell(40).getStringCellValue(), is("inline help text"));
+        assertThat(fieldSheet.getRow(7).getCell(52).getStringCellValue(), is("○"));
+        assertThat(fieldSheet.getRow(7).getCell(54).getStringCellValue(), is("△"));
+        assertThat(fieldSheet.getRow(7).getCell(56).getStringCellValue(), is(""));
+        assertThat(fieldSheet.getRow(7).getCell(62).getStringCellValue(), is("globalPicklist"));
+        assertThat(fieldSheet.getRow(7).getCell(69).getStringCellValue(), is("○"));
+        assertThat(fieldSheet.getRow(7).getCell(71).getStringCellValue(), is("Reference2__c"));
+        assertThat(fieldSheet.getRow(7).getCell(78).getStringCellValue(), is("RelationName"));
+        assertThat(fieldSheet.getRow(7).getCell(85).getStringCellValue(), is("RelationLabel"));
+        assertThat(fieldSheet.getRow(7).getCell(92).getStringCellValue(), is("○"));
+        assertThat(fieldSheet.getRow(7).getCell(96).getStringCellValue(), is(""));
+        assertThat(fieldSheet.getRow(7).getCell(100).getStringCellValue(), is(""));
+        assertThat(fieldSheet.getRow(7).getCell(104).getStringCellValue(), is("default value"));
+        assertThat(fieldSheet.getRow(7).getCell(111).getStringCellValue(), is(""));
+        assertThat(fieldSheet.getRow(7).getCell(113).getStringCellValue(), is("X"));
+        assertThat(fieldSheet.getRow(7).getCell(115).getStringCellValue(), is("全ての文字をマスク"));
+        assertThat(fieldSheet.getRow(7).getCell(121).getStringCellValue(), is("format"));
     }
     
     private void writeTestSheet(Sheet fieldSheet) {
@@ -125,7 +149,7 @@ public class FieldDataTest {
         baseField.setType(FieldType.Text);
         baseField.setLength(3);
         baseField.setDescription("field description");
-        baseField.setInlineHelpText("help text");
+        baseField.setInlineHelpText("inline help text");
         baseField.setRequired(true);
         baseField.setUnique(true);
         baseField.setCaseSensitive(false);
@@ -134,14 +158,14 @@ public class FieldDataTest {
         ValueSet globalPicklist = new ValueSet();
         globalPicklist.setValueSetName("globalPicklist");
         baseField.setValueSet(globalPicklist);
-        baseField.setTrackFeedHistory(true);
-        baseField.setReferenceTo("Reference__c");
+        baseField.setTrackHistory(true);
+        baseField.setReferenceTo("Reference2__c");
         baseField.setRelationshipName("RelationName");
         baseField.setRelationshipLabel("RelationLabel");
         baseField.setDeleteConstraint(DeleteConstraint.SetNull);
         baseField.setWriteRequiresMasterRead(false);
         baseField.setReparentableMasterDetail(false);
-        baseField.setDefaultValue("default");
+        baseField.setDefaultValue("default value");
         baseField.setVisibleLines(0);
         baseField.setMaskChar(EncryptedFieldMaskChar.X);
         baseField.setMaskType(EncryptedFieldMaskType.all);

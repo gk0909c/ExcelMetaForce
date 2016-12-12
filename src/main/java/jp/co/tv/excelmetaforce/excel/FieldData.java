@@ -27,17 +27,18 @@ public class FieldData extends SheetData {
     private final CellInfo required = new CellInfo(0, 52, 2);
     private final CellInfo unique = new CellInfo(0, 54, 2);
     private final CellInfo externalId = new CellInfo(0, 56, 2);
+    // TODO consider picklist sort 
     private final CellInfo sortPicklist = new CellInfo(0, 58, 4);
     private final CellInfo globalPicklist = new CellInfo(0, 62, 7);
     private final CellInfo trackHistory = new CellInfo(0, 69, 2);
     private final CellInfo referenceTo = new CellInfo(0, 71, 7);
     private final CellInfo relationName = new CellInfo(0, 78, 7);
     private final CellInfo relationLabel = new CellInfo(0, 85, 7);
-    private final CellInfo deleteConstraint = new CellInfo(0, 92, 7);
+    private final CellInfo deleteConstraint = new CellInfo(0, 92, 4);
     private final CellInfo writeByReadAuth = new CellInfo(0, 96, 4);
     private final CellInfo reparentable = new CellInfo(0, 100, 4);
-    private final CellInfo defaultValue = new CellInfo(0, 104, 4);
-    private final CellInfo visibleLines = new CellInfo(0, 111, 7);
+    private final CellInfo defaultValue = new CellInfo(0, 104, 7);
+    private final CellInfo visibleLines = new CellInfo(0, 111, 2);
     private final CellInfo maskChar = new CellInfo(0, 113, 2);
     private final CellInfo maskType = new CellInfo(0, 115, 2);
     private final CellInfo displayFormat = new CellInfo(0, 121, 6);
@@ -72,7 +73,6 @@ public class FieldData extends SheetData {
             field.setUnique(converter.getUnique(excel.getStringValue(unique)));
             field.setCaseSensitive(converter.getCaseSensitive(excel.getStringValue(unique)));
             field.setExternalId(excel.getBooleanValue(externalId));
-            // TODO set sort picklist
             field.setValueSet(converter.getGlobalPick(excel.getStringValue(globalPicklist)));
             field.setTrackFeedHistory(excel.getBooleanValue(trackHistory));
             field.setReferenceTo(excel.getStringValue(referenceTo));
@@ -99,10 +99,10 @@ public class FieldData extends SheetData {
         MetadataToExcel converter = new MetadataToExcel();
         int targetRow = START_ROW;
         int headerRowRange = START_ROW - 1;
-        updateRow(targetRow);
 
         for (Metadata target : fields) {
             CustomField field = (CustomField)target;
+            updateRow(targetRow);
             
             excel.setValue(rowNo, targetRow - headerRowRange);
             excel.setValue(fullName, field.getFullName());
@@ -124,7 +124,7 @@ public class FieldData extends SheetData {
             excel.setValue(writeByReadAuth, field.getWriteRequiresMasterRead());
             excel.setValue(reparentable, field.getReparentableMasterDetail());
             excel.setValue(defaultValue, field.getDefaultValue());
-            excel.setValue(visibleLines, field.getVisibleLines());
+            excel.setValueToEmpty(visibleLines, field.getVisibleLines());
             excel.setValue(maskChar, converter.convertMaskChar(field.getMaskChar()));
             excel.setValue(maskType, converter.convertMaskType(field.getMaskType()));
             excel.setValue(displayFormat, field.getDisplayFormat());
@@ -162,6 +162,7 @@ public class FieldData extends SheetData {
             excel.setValue(scale, field.getScale());
         } else {
             excel.setValueToEmpty(length, field.getLength());
+            excel.setValue(scale, "");
         }
     }
     
