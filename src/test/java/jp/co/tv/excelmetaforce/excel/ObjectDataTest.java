@@ -28,7 +28,7 @@ public class ObjectDataTest {
         objectSheet.createRow(18).createCell(10).setCellValue("○");
         objectSheet.createRow(19).createCell(10).setCellValue("○");
         objectSheet.createRow(20).createCell(10).setCellValue("公開（更新可能）");
-        objectSheet.createRow(21).createCell(10).setCellValue("○");
+        objectSheet.createRow(21).createCell(10).setCellValue("リリース済");
         objectSheet.createRow(22).createCell(10).setCellValue("○");
 
         objectSheet.createRow(27).createCell(10).setCellValue("TestNameField");
@@ -91,7 +91,7 @@ public class ObjectDataTest {
         assertThat(sheet.getRow(18).getCell(10).getStringCellValue(), is("○"));
         assertThat(sheet.getRow(19).getCell(10).getStringCellValue(), is("○"));
         assertThat(sheet.getRow(20).getCell(10).getStringCellValue(), is("非公開"));
-        assertThat(sheet.getRow(21).getCell(10).getStringCellValue(), is("○"));
+        assertThat(sheet.getRow(21).getCell(10).getStringCellValue(), is("リリース済"));
         assertThat(sheet.getRow(22).getCell(10).getStringCellValue(), is(""));
         
         assertThat(sheet.getRow(27).getCell(10).getStringCellValue(), is("name label"));
