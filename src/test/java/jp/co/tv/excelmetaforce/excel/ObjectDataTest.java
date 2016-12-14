@@ -2,6 +2,7 @@ package jp.co.tv.excelmetaforce.excel;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -15,11 +16,13 @@ import com.sforce.soap.metadata.FieldType;
 import com.sforce.soap.metadata.Metadata;
 import com.sforce.soap.metadata.SharingModel;
 
+import jp.co.tv.excelmetaforce.sfdc.Connector;
+
 public class ObjectDataTest {
     @Test
     public void testRead() {
         Workbook book = new XSSFWorkbook();
-        Sheet objectSheet = book.createSheet("オブジェクト定義");
+        Sheet objectSheet = book.createSheet(ObjectData.SHEET_NAME);
         objectSheet.createRow(0).createCell(27).setCellValue("FullName");
         objectSheet.createRow(1).createCell(27).setCellValue("ObjectLabel");
         objectSheet.createRow(7).createCell(1).setCellValue("Object Description");
@@ -81,8 +84,6 @@ public class ObjectDataTest {
         obj.setNameField(name);
         
         ObjectData data = new ObjectData(book);
-        assertThat(data.getMetadataType(), is("CustomObject"));
-        assertThat(data.getTargetMetadata(), is(new String[]{"ObjApiName__c"}));
         data.write(new Metadata[]{obj});
         
         assertThat(sheet.getRow(7).getCell(1).getStringCellValue(), is("test description"));
@@ -98,5 +99,24 @@ public class ObjectDataTest {
         assertThat(sheet.getRow(28).getCell(10).getStringCellValue(), is("テキスト"));
         assertThat(sheet.getRow(29).getCell(10).getStringCellValue(), is(""));
         assertThat(sheet.getRow(30).getCell(10).getStringCellValue(), is(""));
+    }
+    
+    @Test
+    public void testTargetMetadata() {
+        Workbook book = new XSSFWorkbook();
+        final Sheet sheet = book.createSheet(ObjectData.SHEET_NAME);
+        sheet.createRow(0).createCell(27).setCellValue("ObjApiName__c");
+        sheet.createRow(1).createCell(27).setCellValue("obj label");
+        
+        // Connector mock
+        CustomObject object = new CustomObject();
+        object.setFullName("MockObject__c");
+        Connector mock = mock(Connector.class);
+        when(mock.readMetadata(anyString(), any())).thenReturn(new Metadata[]{object});
+
+        ObjectData data = new ObjectData(book);
+        data.conn = mock;
+        assertThat(data.getTargetMetadata(), is(new Metadata[]{object}));
+        
     }
 }

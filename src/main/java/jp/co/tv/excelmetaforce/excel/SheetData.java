@@ -5,9 +5,13 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import com.sforce.soap.metadata.Metadata;
 
+import jp.co.tv.excelmetaforce.sfdc.ConnectionManager;
+import jp.co.tv.excelmetaforce.sfdc.Connector;
+
 public abstract class SheetData {
     protected final Sheet sheet;
     protected final ExcelOperator excel;
+    protected Connector conn = new Connector(new ConnectionManager());
     
     /**
      * init excel sheet data
@@ -24,7 +28,5 @@ public abstract class SheetData {
     
     public abstract void write(Metadata... write);
     
-    public abstract String getMetadataType();
-    
-    public abstract String[] getTargetMetadata();
+    public abstract Metadata[] getTargetMetadata();
 }

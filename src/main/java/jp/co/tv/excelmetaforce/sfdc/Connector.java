@@ -18,9 +18,20 @@ public class Connector {
         partnerConn = manager.getPartnerConnection();
     }
 
-    public Metadata[] readMetadata(String type, String... target) throws ConnectionException {
-        ReadResult result = metaConn.readMetadata(type, target);
-        return result.getRecords();
+    /**
+     * get specified metadata 
+     * 
+     * @param type metadata type
+     * @param target target metadata list
+     * @return Metadata[]
+     */
+    public Metadata[] readMetadata(String type, String... target) {
+        try {
+            ReadResult result = metaConn.readMetadata(type, target);
+            return result.getRecords();
+        } catch (ConnectionException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     public List<SaveResult> createMetadata(Metadata[] metadata) {

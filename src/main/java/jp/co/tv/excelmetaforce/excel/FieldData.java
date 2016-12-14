@@ -3,10 +3,13 @@ package jp.co.tv.excelmetaforce.excel;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import com.sforce.soap.metadata.CustomField;
+import com.sforce.soap.metadata.CustomObject;
 import com.sforce.soap.metadata.Metadata;
+import com.sforce.soap.metadata.ValueSet;
 
 import jp.co.tv.excelmetaforce.converter.ExcelToMetadata;
 import jp.co.tv.excelmetaforce.converter.MetadataToExcel;
@@ -15,6 +18,8 @@ public class FieldData extends SheetData {
     public static final String SHEET_NAME = "項目定義";
     private static final int START_ROW = 7;
     
+    private final CellInfo objectFullName = new CellInfo(0, 27, 0);
+
     private final CellInfo isTarget = new CellInfo(0, 0, 0);
     private final CellInfo rowNo = new CellInfo(0, 1, 2);
     private final CellInfo fullName = new CellInfo(0, 3, 7);
@@ -40,7 +45,7 @@ public class FieldData extends SheetData {
     private final CellInfo defaultValue = new CellInfo(0, 104, 7);
     private final CellInfo visibleLines = new CellInfo(0, 111, 2);
     private final CellInfo maskChar = new CellInfo(0, 113, 2);
-    private final CellInfo maskType = new CellInfo(0, 115, 2);
+    private final CellInfo maskType = new CellInfo(0, 115, 6);
     private final CellInfo displayFormat = new CellInfo(0, 121, 6);
 
 
@@ -104,6 +109,9 @@ public class FieldData extends SheetData {
             CustomField field = (CustomField)target;
             updateRow(targetRow);
             
+            System.out.println("now row" + rowNo.getRow());
+            System.out.println("target row" + targetRow);
+            
             excel.setValue(rowNo, targetRow - headerRowRange);
             excel.setValue(fullName, field.getFullName());
             excel.setValue(label, field.getLabel());
@@ -115,7 +123,7 @@ public class FieldData extends SheetData {
             excel.setValue(unique, converter.getUnique(field.getUnique(), field.getCaseSensitive()));
             excel.setValue(externalId, field.getExternalId());
             // Todo Picklist sort
-            excel.setValue(globalPicklist, field.getValueSet().getValueSetName());
+            excel.setValue(globalPicklist, getGlobalPicklistName(field.getValueSet()));
             excel.setValue(trackHistory, field.getTrackHistory());
             excel.setValue(referenceTo, field.getReferenceTo());
             excel.setValue(relationName, field.getRelationshipName());
@@ -135,13 +143,11 @@ public class FieldData extends SheetData {
     }
 
     @Override
-    public String getMetadataType() {
-        throw new RuntimeException("not implement");
-    }
-
-    @Override
-    public String[] getTargetMetadata() {
-        throw new RuntimeException("not implement");
+    public Metadata[] getTargetMetadata() {
+        String[] targetObject = new String[]{excel.getStringValue(objectFullName)};
+        Metadata[] customObject = conn.readMetadata("CustomObject", targetObject);
+        
+        return ((CustomObject)customObject[0]).getFields();
     }
     
     private void setLength(CustomField field, ExcelToMetadata converter) {
@@ -180,5 +186,9 @@ public class FieldData extends SheetData {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    private String getGlobalPicklistName(ValueSet val) {
+        return val == null ? StringUtils.EMPTY : val.getValueSetName();
     }
 }

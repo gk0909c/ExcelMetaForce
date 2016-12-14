@@ -10,7 +10,7 @@ import jp.co.tv.excelmetaforce.converter.ExcelToMetadata;
 import jp.co.tv.excelmetaforce.converter.MetadataToExcel;
 
 public class ObjectData extends SheetData {
-    private static final String SHEET_NAME = "オブジェクト定義";
+    public static final String SHEET_NAME = "オブジェクト定義";
     
     private final CellInfo fullName = new CellInfo(0, 27, 0);
     private final CellInfo label = new CellInfo(1, 27, 0);
@@ -83,12 +83,8 @@ public class ObjectData extends SheetData {
     }
 
     @Override
-    public String getMetadataType() {
-        return "CustomObject";
-    }
-
-    @Override
-    public String[] getTargetMetadata() {
-        return new String[]{excel.getStringValue(fullName)};
+    public Metadata[] getTargetMetadata() {
+        String[] targetObject = new String[]{excel.getStringValue(fullName)};
+        return conn.readMetadata("CustomObject", targetObject);
     }
 }

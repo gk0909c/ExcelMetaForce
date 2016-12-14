@@ -31,10 +31,12 @@ public class MetadataToExcel extends BaseConverter {
     }
 
     public String convMaskChar(EncryptedFieldMaskChar val) {
+        if (val == null) return StringUtils.EMPTY;
         return getMappingValue(MASK_CHAR, val.name());
     }
 
     public String convMaskType(EncryptedFieldMaskType val) {
+        if (val == null) return StringUtils.EMPTY;
         return getMappingValue(MASK_TYPE, val.name());
     }
 

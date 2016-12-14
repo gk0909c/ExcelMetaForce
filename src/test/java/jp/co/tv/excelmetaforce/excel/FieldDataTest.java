@@ -2,6 +2,7 @@ package jp.co.tv.excelmetaforce.excel;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -12,12 +13,15 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.sforce.soap.metadata.CustomField;
+import com.sforce.soap.metadata.CustomObject;
 import com.sforce.soap.metadata.DeleteConstraint;
 import com.sforce.soap.metadata.EncryptedFieldMaskChar;
 import com.sforce.soap.metadata.EncryptedFieldMaskType;
 import com.sforce.soap.metadata.FieldType;
 import com.sforce.soap.metadata.Metadata;
 import com.sforce.soap.metadata.ValueSet;
+
+import jp.co.tv.excelmetaforce.sfdc.Connector;
 
 public class FieldDataTest {
     @Rule
@@ -69,13 +73,13 @@ public class FieldDataTest {
         field2.setType(FieldType.Number);
         field2.setPrecision(3);
         field2.setScale(2);
+        field2.setValueSet(null);
 
         Workbook book = new XSSFWorkbook();
         Sheet fieldSheet = book.createSheet(FieldData.SHEET_NAME);
         FieldData data = new FieldData(book);
         data.write(new Metadata[]{field1, field2});
         
-        // TODO continue from here 
         assertThat(fieldSheet.getRow(7).getCell(1).getStringCellValue(), is("1"));
         assertThat(fieldSheet.getRow(7).getCell(3).getStringCellValue(), is("field1__c"));
         assertThat(fieldSheet.getRow(7).getCell(10).getStringCellValue(), is("field label"));
@@ -100,6 +104,12 @@ public class FieldDataTest {
         assertThat(fieldSheet.getRow(7).getCell(113).getStringCellValue(), is("X"));
         assertThat(fieldSheet.getRow(7).getCell(115).getStringCellValue(), is("全ての文字をマスク"));
         assertThat(fieldSheet.getRow(7).getCell(121).getStringCellValue(), is("format"));
+
+        assertThat(fieldSheet.getRow(8).getCell(1).getStringCellValue(), is("2"));
+        assertThat(fieldSheet.getRow(8).getCell(17).getStringCellValue(), is("数値"));
+        assertThat(fieldSheet.getRow(8).getCell(23).getStringCellValue(), is("1"));
+        assertThat(fieldSheet.getRow(8).getCell(26).getStringCellValue(), is("2"));
+        assertThat(fieldSheet.getRow(8).getCell(62).getStringCellValue(), is(""));
     }
     
     private void writeTestSheet(Sheet fieldSheet) {
@@ -175,20 +185,25 @@ public class FieldDataTest {
     }
     
     @Test
-    public void testGetMetadataTypeNotImplement() {
+    public void testGetTargetMetadata() {
         Workbook book = new XSSFWorkbook();
+        final Sheet sheet = book.createSheet(FieldData.SHEET_NAME);
+        sheet.createRow(0).createCell(27).setCellValue("ObjApiName__c");
+        sheet.createRow(1).createCell(27).setCellValue("obj label");
+        
+        // Connector mock
+        CustomObject object = new CustomObject();
+        object.setFullName("MockObject__c");
+        CustomField field1 = new CustomField();
+        field1.setFullName("MockField1__c");
+        CustomField field2 = new CustomField();
+        field2.setFullName("MockField2__c");
+        object.setFields(new CustomField[]{field1, field2});
+        Connector mock = mock(Connector.class);
+        when(mock.readMetadata(anyString(), any())).thenReturn(new Metadata[]{object});
+
         FieldData data = new FieldData(book);
-
-        notImplement.expect(RuntimeException.class);
-        data.getMetadataType();
-    }
-
-    @Test
-    public void testGetTargetMetadataNotImplement() {
-        Workbook book = new XSSFWorkbook();
-        FieldData data = new FieldData(book);
-
-        notImplement.expect(RuntimeException.class);
-        data.getTargetMetadata();
+        data.conn = mock;
+        assertThat(data.getTargetMetadata(), is(new Metadata[]{field1, field2}));
     }
 }

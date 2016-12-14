@@ -64,6 +64,7 @@ public class MetadataToExcelTest {
     public void testEncryptedFieldChar() {
         assertThat(converter.convMaskChar(EncryptedFieldMaskChar.asterisk), is("*"));
         assertThat(converter.convMaskChar(EncryptedFieldMaskChar.X), is("X"));
+        assertThat(converter.convMaskChar(null), is(""));
     }
 
     @Test
@@ -74,6 +75,7 @@ public class MetadataToExcelTest {
         assertThat(converter.convMaskType(EncryptedFieldMaskType.nino), is("国民保険番号"));
         assertThat(converter.convMaskType(EncryptedFieldMaskType.ssn), is("社会保障番号"));
         assertThat(converter.convMaskType(EncryptedFieldMaskType.sin), is("社会保険番号"));
+        assertThat(converter.convMaskType(null), is(""));
     }
 
     @Test
