@@ -9,3 +9,4 @@ out
 build
 bin
 /sfdc_connection_info.yml
+/excel-metaforce.log

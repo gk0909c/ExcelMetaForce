@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sforce.soap.metadata.CustomField;
 import com.sforce.soap.metadata.CustomObject;
@@ -17,6 +19,7 @@ import jp.co.tv.excelmetaforce.converter.MetadataToExcel;
 public class FieldData extends SheetData {
     public static final String SHEET_NAME = "項目定義";
     private static final int START_ROW = 7;
+    private static final Logger LOGGER = LoggerFactory.getLogger(FieldData.class);
     
     private final CellInfo objectFullName = new CellInfo(0, 27, 0);
 
@@ -109,9 +112,6 @@ public class FieldData extends SheetData {
             CustomField field = (CustomField)target;
             updateRow(targetRow);
             
-            System.out.println("now row" + rowNo.getRow());
-            System.out.println("target row" + targetRow);
-            
             excel.setValue(rowNo, targetRow - headerRowRange);
             excel.setValue(fullName, field.getFullName());
             excel.setValue(label, field.getLabel());
@@ -144,7 +144,10 @@ public class FieldData extends SheetData {
 
     @Override
     public Metadata[] getTargetMetadata() {
-        String[] targetObject = new String[]{excel.getStringValue(objectFullName)};
+        String objApi = excel.getStringValue(objectFullName);
+        LOGGER.info(String.format("get custom object fields: %s", objApi));
+        
+        String[] targetObject = new String[]{objApi};
         Metadata[] customObject = conn.readMetadata("CustomObject", targetObject);
         
         return ((CustomObject)customObject[0]).getFields();
