@@ -3,15 +3,26 @@ package jp.co.tv.excelmetaforce.excel;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExcelOperator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExcelOperator.class);
+    
+    private final Workbook book;
     private final Sheet sheet;
     
-    public ExcelOperator(Sheet sheet) {
+    public ExcelOperator(Workbook book, Sheet sheet) {
+        this.book = book;
         this.sheet = sheet;
     }
 
@@ -44,14 +55,18 @@ public class ExcelOperator {
     }
     
     private Cell getCell(CellInfo cellInfo) {
-        Row row = sheet.getRow(cellInfo.getRow());
+        return getCell(cellInfo.getRow(), cellInfo.getCol());
+    }
+
+    private Cell getCell(int rowNum, int colNum) {
+        Row row = sheet.getRow(rowNum);
         if (row == null) {
-            row = sheet.createRow(cellInfo.getRow());
+            row = sheet.createRow(rowNum);
         }
         
-        Cell cell = row.getCell(cellInfo.getCol());
+        Cell cell = row.getCell(colNum);
         if (cell == null) {
-            cell = row.createCell(cellInfo.getCol());
+            cell = row.createCell(colNum);
         }
 
         return cell;
@@ -128,6 +143,28 @@ public class ExcelOperator {
             int startCol = cellInfo.getCol();
             int endCol = startCol + cellInfo.getColSpan() - 1;
             sheet.addMergedRegion(new CellRangeAddress(row, row, startCol, endCol));
+
+            CellStyle cellStyle = createBaseStyle();
+            
+            for (int i = startCol; i < endCol + 1; i++) {
+                LOGGER.trace(String.format("set style, target row:%d, target col: %d", row, i));
+                getCell(row, i).setCellStyle(cellStyle);
+            }
         }
+    }
+    
+    private CellStyle createBaseStyle() {
+        Font font = book.createFont();
+        font.setFontName("Meiryo");
+
+        CellStyle style = book.createCellStyle();
+        style.setFont(font);
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        
+        return style;
     }
 }

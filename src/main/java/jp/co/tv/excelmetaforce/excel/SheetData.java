@@ -21,7 +21,7 @@ public abstract class SheetData {
      */
     public SheetData(Workbook book, String sheetName) {
         this.sheet = book.getSheet(sheetName);
-        this.excel  = new ExcelOperator(this.sheet);
+        this.excel  = new ExcelOperator(book, this.sheet);
     }
     
     public abstract Metadata[] read();

@@ -26,18 +26,18 @@ public class ObjectDataTest {
         objectSheet.createRow(0).createCell(27).setCellValue("FullName");
         objectSheet.createRow(1).createCell(27).setCellValue("ObjectLabel");
         objectSheet.createRow(7).createCell(1).setCellValue("Object Description");
-        objectSheet.createRow(16).createCell(10).setCellValue("○");
-        objectSheet.createRow(17).createCell(10).setCellValue("○");
-        objectSheet.createRow(18).createCell(10).setCellValue("○");
-        objectSheet.createRow(19).createCell(10).setCellValue("○");
-        objectSheet.createRow(20).createCell(10).setCellValue("公開（更新可能）");
-        objectSheet.createRow(21).createCell(10).setCellValue("リリース済");
-        objectSheet.createRow(22).createCell(10).setCellValue("○");
+        objectSheet.createRow(16).createCell(11).setCellValue("○");
+        objectSheet.createRow(17).createCell(11).setCellValue("○");
+        objectSheet.createRow(18).createCell(11).setCellValue("○");
+        objectSheet.createRow(19).createCell(11).setCellValue("○");
+        objectSheet.createRow(20).createCell(11).setCellValue("公開（更新可能）");
+        objectSheet.createRow(21).createCell(11).setCellValue("リリース済");
+        objectSheet.createRow(22).createCell(11).setCellValue("○");
 
-        objectSheet.createRow(27).createCell(10).setCellValue("TestNameField");
-        objectSheet.createRow(28).createCell(10).setCellValue("自動採番");
-        objectSheet.createRow(29).createCell(10).setCellValue("Test-{00000}");
-        objectSheet.createRow(30).createCell(10).setCellValue("1");
+        objectSheet.createRow(27).createCell(11).setCellValue("TestNameField");
+        objectSheet.createRow(28).createCell(11).setCellValue("自動採番");
+        objectSheet.createRow(29).createCell(11).setCellValue("Test-{00000}");
+        objectSheet.createRow(30).createCell(11).setCellValue("1");
 
         ObjectData data = new ObjectData(book);
         CustomObject object = (CustomObject)data.read()[0];
@@ -87,18 +87,18 @@ public class ObjectDataTest {
         data.write(new Metadata[]{obj});
         
         assertThat(sheet.getRow(7).getCell(1).getStringCellValue(), is("test description"));
-        assertThat(sheet.getRow(16).getCell(10).getStringCellValue(), is("○"));
-        assertThat(sheet.getRow(17).getCell(10).getStringCellValue(), is(""));
-        assertThat(sheet.getRow(18).getCell(10).getStringCellValue(), is("○"));
-        assertThat(sheet.getRow(19).getCell(10).getStringCellValue(), is("○"));
-        assertThat(sheet.getRow(20).getCell(10).getStringCellValue(), is("非公開"));
-        assertThat(sheet.getRow(21).getCell(10).getStringCellValue(), is("リリース済"));
-        assertThat(sheet.getRow(22).getCell(10).getStringCellValue(), is(""));
+        assertThat(sheet.getRow(16).getCell(11).getStringCellValue(), is("○"));
+        assertThat(sheet.getRow(17).getCell(11).getStringCellValue(), is(""));
+        assertThat(sheet.getRow(18).getCell(11).getStringCellValue(), is("○"));
+        assertThat(sheet.getRow(19).getCell(11).getStringCellValue(), is("○"));
+        assertThat(sheet.getRow(20).getCell(11).getStringCellValue(), is("非公開"));
+        assertThat(sheet.getRow(21).getCell(11).getStringCellValue(), is("リリース済"));
+        assertThat(sheet.getRow(22).getCell(11).getStringCellValue(), is(""));
         
-        assertThat(sheet.getRow(27).getCell(10).getStringCellValue(), is("name label"));
-        assertThat(sheet.getRow(28).getCell(10).getStringCellValue(), is("テキスト"));
-        assertThat(sheet.getRow(29).getCell(10).getStringCellValue(), is(""));
-        assertThat(sheet.getRow(30).getCell(10).getStringCellValue(), is(""));
+        assertThat(sheet.getRow(27).getCell(11).getStringCellValue(), is("name label"));
+        assertThat(sheet.getRow(28).getCell(11).getStringCellValue(), is("テキスト"));
+        assertThat(sheet.getRow(29).getCell(11).getStringCellValue(), is(""));
+        assertThat(sheet.getRow(30).getCell(11).getStringCellValue(), is(""));
     }
     
     @Test

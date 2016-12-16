@@ -20,18 +20,18 @@ public class ObjectData extends SheetData {
     private final CellInfo label = new CellInfo(1, 27, 0);
 
     private final CellInfo description = new CellInfo(7, 1, 0);
-    private final CellInfo report = new CellInfo(16, 10, 0);
-    private final CellInfo activity = new CellInfo(17, 10, 0);
-    private final CellInfo chatter = new CellInfo(18, 10, 0);
-    private final CellInfo history = new CellInfo(19, 10, 0);
-    private final CellInfo share = new CellInfo(20, 10, 0);
-    private final CellInfo deploy = new CellInfo(21, 10, 0);
-    private final CellInfo search = new CellInfo(22, 10, 0);
+    private final CellInfo report = new CellInfo(16, 11, 0);
+    private final CellInfo activity = new CellInfo(17, 11, 0);
+    private final CellInfo chatter = new CellInfo(18, 11, 0);
+    private final CellInfo history = new CellInfo(19, 11, 0);
+    private final CellInfo share = new CellInfo(20, 11, 0);
+    private final CellInfo deploy = new CellInfo(21, 11, 0);
+    private final CellInfo search = new CellInfo(22, 11, 0);
 
-    private final CellInfo nameLabel = new CellInfo(27, 10, 0);
-    private final CellInfo type = new CellInfo(28, 10, 0);
-    private final CellInfo format = new CellInfo(29, 10, 0);
-    private final CellInfo startNum = new CellInfo(30, 10, 0);
+    private final CellInfo nameLabel = new CellInfo(27, 11, 0);
+    private final CellInfo type = new CellInfo(28, 11, 0);
+    private final CellInfo format = new CellInfo(29, 11, 0);
+    private final CellInfo startNum = new CellInfo(30, 11, 0);
 
     public ObjectData(Workbook book) {
         super(book, SHEET_NAME);
