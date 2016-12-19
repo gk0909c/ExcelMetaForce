@@ -1,17 +1,26 @@
 package jp.co.tv.excelmetaforce.excel;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sforce.soap.metadata.CustomField;
 import com.sforce.soap.metadata.CustomObject;
+import com.sforce.soap.metadata.CustomValue;
+import com.sforce.soap.metadata.FieldType;
 import com.sforce.soap.metadata.Metadata;
 import com.sforce.soap.metadata.ValueSet;
+import com.sforce.soap.metadata.ValueSetValuesDefinition;
 
 import jp.co.tv.excelmetaforce.converter.ExcelToMetadata;
 import jp.co.tv.excelmetaforce.converter.MetadataToExcel;
@@ -20,6 +29,8 @@ public class FieldData extends SheetData {
     public static final String SHEET_NAME = "項目定義";
     private static final int START_ROW = 7;
     private static final Logger LOGGER = LoggerFactory.getLogger(FieldData.class);
+    
+    private final PicklistData picklistData;
     
     private final CellInfo objectFullName = new CellInfo(0, 27, 0);
 
@@ -35,7 +46,6 @@ public class FieldData extends SheetData {
     private final CellInfo required = new CellInfo(0, 52, 2);
     private final CellInfo unique = new CellInfo(0, 54, 2);
     private final CellInfo externalId = new CellInfo(0, 56, 2);
-    // TODO consider picklist sort 
     private final CellInfo sortPicklist = new CellInfo(0, 58, 4);
     private final CellInfo globalPicklist = new CellInfo(0, 62, 7);
     private final CellInfo trackHistory = new CellInfo(0, 69, 2);
@@ -54,11 +64,13 @@ public class FieldData extends SheetData {
 
     public FieldData(Workbook book) {
         super(book, SHEET_NAME);
+        picklistData = new PicklistData(book);
     }
 
     @Override
     public Metadata[] read() {
         ExcelToMetadata converter = new ExcelToMetadata();
+        picklistData.read();
         int targetRow = START_ROW;
         List<CustomField> fields = new ArrayList<CustomField>();
         
@@ -81,7 +93,7 @@ public class FieldData extends SheetData {
             field.setUnique(converter.getUnique(excel.getStringValue(unique)));
             field.setCaseSensitive(converter.getCaseSensitive(excel.getStringValue(unique)));
             field.setExternalId(excel.getBooleanValue(externalId));
-            field.setValueSet(converter.getGlobalPick(excel.getStringValue(globalPicklist)));
+            setPicklistInfo(field, converter);
             field.setTrackFeedHistory(excel.getBooleanValue(trackHistory));
             field.setReferenceTo(excel.getStringValue(referenceTo));
             field.setRelationshipName(excel.getStringValue(relationName));
@@ -122,8 +134,7 @@ public class FieldData extends SheetData {
             excel.setValue(required, field.getRequired());
             excel.setValue(unique, converter.getUnique(field.getUnique(), field.getCaseSensitive()));
             excel.setValue(externalId, field.getExternalId());
-            // Todo Picklist sort
-            excel.setValue(globalPicklist, getGlobalPicklistName(field.getValueSet()));
+            writePicklistDefinition(field);
             excel.setValue(trackHistory, field.getTrackHistory());
             excel.setValue(referenceTo, field.getReferenceTo());
             excel.setValue(relationName, field.getRelationshipName());
@@ -154,6 +165,8 @@ public class FieldData extends SheetData {
     }
     
     private void setLength(CustomField field, ExcelToMetadata converter) {
+        if (!converter.needLengthType(field.getType())) return;
+        
         int lengthVal = excel.getNumericValue(length).intValue();
 
         if (converter.isNumericType(field.getType())) {
@@ -176,14 +189,18 @@ public class FieldData extends SheetData {
     }
     
     private void updateRow(int tmpRow) {
+        updateRow(tmpRow, this);
+    }
+
+    private void updateRow(int tmpRow, Object instance) {
         try {
-            java.lang.reflect.Field[] fields = this.getClass().getDeclaredFields();
+            java.lang.reflect.Field[] fields = instance.getClass().getDeclaredFields();
             
             for (java.lang.reflect.Field field : fields) {
                 if (!field.getType().equals(CellInfo.class)) continue;
                 
                 field.setAccessible(true);
-                CellInfo cellInfo = (CellInfo)field.get(this);
+                CellInfo cellInfo = (CellInfo)field.get(instance);
                 cellInfo.setRow(tmpRow);
             }
         } catch (Exception e) {
@@ -191,7 +208,117 @@ public class FieldData extends SheetData {
         }
     }
     
-    private String getGlobalPicklistName(ValueSet val) {
-        return val == null ? StringUtils.EMPTY : val.getValueSetName();
+    private void setPicklistInfo(CustomField field, ExcelToMetadata converter) {
+        if (!isPicklist(field)) return;
+        
+        String globalPicklistName = excel.getStringValue(globalPicklist);
+        
+        if (StringUtils.isEmpty(globalPicklistName)) {
+            ValueSetValuesDefinition picklist = picklistData.getPicklist(field.getFullName());
+            picklist.setSorted(excel.getBooleanValue(sortPicklist));
+            ValueSet valueSet = new ValueSet();
+            valueSet.setValueSetDefinition(picklist);
+            field.setValueSet(valueSet);
+            return;
+        }
+
+        field.setValueSet(converter.getGlobalPick(globalPicklistName));
+    }
+    
+    private boolean isPicklist(CustomField field) {
+        FieldType type = field.getType();
+        return type.equals(FieldType.Picklist)
+                || type.equals(FieldType.MultiselectPicklist);
+    }
+    
+    private void writePicklistDefinition(CustomField field) {
+        // not picklist
+        if (!isPicklist(field)) {
+            excel.setValue(sortPicklist, StringUtils.EMPTY);
+            excel.setValue(globalPicklist, StringUtils.EMPTY);
+            return;
+        }
+
+        // individual picklist
+        ValueSet valueSet = field.getValueSet();
+        if (StringUtils.isEmpty(valueSet.getValueSetName())) {
+            ValueSetValuesDefinition picklist = field.getValueSet().getValueSetDefinition();
+            excel.setValue(sortPicklist, picklist.getSorted());
+            excel.setValue(globalPicklist, StringUtils.EMPTY);
+            picklistData.write(field, picklist);
+            return;
+        }
+        
+        // global picklist
+        excel.setValue(sortPicklist, StringUtils.EMPTY);
+        excel.setValue(globalPicklist, valueSet.getValueSetName());
+    }
+    
+    class PicklistData {
+        public static final String SHEET_NAME = "選択リスト定義";
+
+        private final Sheet sheet;
+        private final ExcelOperator excel;
+        private static final int START_ROW = 6;
+        private int targetRow = START_ROW;
+
+        private final Map<String, ValueSetValuesDefinition> picklistMap;
+
+        private final CellInfo rowNo = new CellInfo(0, 1, 2);
+        private final CellInfo fieldApiName = new CellInfo(0, 3, 7);
+        private final CellInfo fieldLabel = new CellInfo(0, 10, 7);
+        private final CellInfo fullName = new CellInfo(0, 17, 7);
+        private final CellInfo isDefault = new CellInfo(0, 25, 3);
+
+        PicklistData(Workbook book) {
+            this.sheet = book.getSheet(SHEET_NAME);
+            this.excel  = new ExcelOperator(book, this.sheet);
+            picklistMap = new ConcurrentHashMap<String, ValueSetValuesDefinition>();
+        }
+        
+        public void read() {
+            MultiValuedMap<String, CustomValue> storeRead = new ArrayListValuedHashMap<String, CustomValue>();
+
+            // store picklist values per field
+            while (!excel.isEmpty(targetRow, fieldApiName.getCol())) {
+                updateRow(targetRow, this);
+                
+                CustomValue value = new CustomValue();
+                value.setFullName(excel.getStringValue(fullName));
+                value.setDefault(excel.getBooleanValue(isDefault));
+                storeRead.put(excel.getStringValue(fieldApiName), value);
+                
+                targetRow++;
+            }
+            
+            // merge picklist values 
+            for (String fieldApiName : storeRead.keySet()) {
+                Collection<CustomValue> customValues = storeRead.get(fieldApiName);
+                
+                ValueSetValuesDefinition picklistDefinition = new ValueSetValuesDefinition();
+                picklistDefinition.setValue(customValues.toArray(new CustomValue[]{}));
+                picklistMap.put(fieldApiName, picklistDefinition);
+            }
+        }
+        
+        public ValueSetValuesDefinition getPicklist(String fieldApiName) {
+            return picklistMap.get(fieldApiName);
+        }
+
+        public void write(CustomField field, ValueSetValuesDefinition picklist) {
+            int headerRowRange = START_ROW - 1;
+            
+            for (CustomValue customValue : picklist.getValue()) {
+                updateRow(targetRow, this);
+
+                excel.setValue(rowNo, targetRow - headerRowRange);
+                excel.setValue(fieldApiName, field.getFullName());
+                excel.setValue(fieldLabel, field.getLabel());
+                excel.setValue(fullName, customValue.getFullName());
+                excel.setValue(isDefault, customValue.getDefault());
+                
+                targetRow++;
+            }
+        }
     }
 }

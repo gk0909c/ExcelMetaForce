@@ -53,6 +53,19 @@ public class BaseConverter {
      * @param type target 
      * @return is numeric
      */
+    public boolean needLengthType(FieldType type) {
+        return FieldType.Text.equals(type)
+                || FieldType.Number.equals(type)
+                || FieldType.Currency.equals(type)
+                || FieldType.Percent.equals(type);
+    }
+
+    /**
+     * check passed type is numeric type.
+     * 
+     * @param type target 
+     * @return is numeric
+     */
     public boolean isNumericType(FieldType type) {
         return FieldType.Number.equals(type)
                 || FieldType.Currency.equals(type)

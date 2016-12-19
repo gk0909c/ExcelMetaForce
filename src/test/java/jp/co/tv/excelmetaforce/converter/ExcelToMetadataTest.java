@@ -110,6 +110,15 @@ public class ExcelToMetadataTest {
     }
 
     @Test
+    public void testNeedLengthType() {
+        assertThat(converter.needLengthType(FieldType.Text), is(true));
+        assertThat(converter.needLengthType(FieldType.Number), is(true));
+        assertThat(converter.needLengthType(FieldType.Currency), is(true));
+        assertThat(converter.needLengthType(FieldType.Percent), is(true));
+        assertThat(converter.needLengthType(FieldType.Phone), is(false));
+    }
+
+    @Test
     public void testIsNumericType() {
         assertThat(converter.isNumericType(FieldType.Text), is(false));
         assertThat(converter.isNumericType(FieldType.Number), is(true));

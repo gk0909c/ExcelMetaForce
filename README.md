@@ -1,5 +1,5 @@
 # ExcelMetaForce
-This is to manipulate Salesforce Metadata via Excel
+This is to manipulate salesforce metadata via Excel
 
 This is developing now.
 
@@ -29,6 +29,7 @@ proxyPass:
 + 各行のスタイルなど
   + リストでの入力強制（FieldTypeとか）
 + 選択リストの実装
+> testing
 
 ## テンポラリ設計
 ### やりたい操作

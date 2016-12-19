@@ -8,18 +8,23 @@ public final class ReadCustomObject {
     private ReadCustomObject() {}
 
     /**
-     * Read Custom Object Definition from Salesforce, and write to excel workbook. 
+     * Read Custom Object Definition from salesforce, and write to excel workbook. 
      * + object definition 
      * + field definition
      * + picklist definition
      * 
-     * @param args args
+     * @param args arguments
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void main(String... args) {
-        Class[] target = new Class[]{ObjectData.class, FieldData.class};
+        // set read target metadata
+        Class[] target = new Class[]{
+            ObjectData.class,
+            FieldData.class
+        };
         String excelFileName = "オブジェクト定義.xlsx";
         
+        // execute target operation
         for (Class cls : target) {
             new Reader(cls, excelFileName).read();
         }
