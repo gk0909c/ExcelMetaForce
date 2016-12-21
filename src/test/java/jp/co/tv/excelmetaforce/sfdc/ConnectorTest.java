@@ -49,7 +49,7 @@ public class ConnectorTest {
     }
 
     @Test
-    public void testReadMetadata() throws Exception {
+    public void readMetadataReturnResult() throws Exception {
         String objApi = "TestObj__c";
         CustomObject obj = new CustomObject();
         obj.setFullName(objApi);
@@ -67,7 +67,7 @@ public class ConnectorTest {
     }
     
     @Test
-    public void testFailReadMetadata() throws ConnectionException {
+    public void readMetadataFail() throws ConnectionException {
         // mock MetadataConnection
         doThrow(ConnectionException.class).when(metaConn).readMetadata(anyString(), any());
         
@@ -78,7 +78,7 @@ public class ConnectorTest {
     }
 
     @Test
-    public void testCreateMetadata() throws Exception {
+    public void createMetadataCalledPer10Metadata() throws Exception {
         String objApi = "TestObj__c";
         CustomObject obj = new CustomObject();
         obj.setFullName(objApi);
@@ -99,7 +99,7 @@ public class ConnectorTest {
     }
     
     @Test
-    public void testFailCreateMetadata() throws ConnectionException {
+    public void createMetadataFail() throws ConnectionException {
         // mock MetadataConnection
         doThrow(ConnectionException.class).when(metaConn).createMetadata(any());
         

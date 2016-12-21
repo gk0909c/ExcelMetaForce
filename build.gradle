@@ -35,11 +35,18 @@ pmd {
     )
 }
 
-test {
-    jacoco {
-        excludes = [
-            "jp.co.tv.excelmetaforce.sfdc.ConnectionManager",
-            "jp.co.tv.excelmetaforce.sfdc.SfdcConnectionInfo"
-        ]
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(
+                dir: it,
+                exclude: [
+                    'jp/co/tv/excelmetaforce/sfdc/ConnectionManager.class',
+                    'jp/co/tv/excelmetaforce/sfdc/SfdcConnectionInfo.class',
+                    'jp/co/tv/excelmetaforce/*.class',
+                    'jp/co/tv/excelmetaforce/runner/*.class'
+                ]
+            )
+        })
     }
 }
