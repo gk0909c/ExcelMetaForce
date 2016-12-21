@@ -267,8 +267,8 @@ public class FieldData extends SheetData {
         private final CellInfo rowNo = new CellInfo(0, 1, 2);
         private final CellInfo fieldApiName = new CellInfo(0, 3, 7);
         private final CellInfo fieldLabel = new CellInfo(0, 10, 7);
-        private final CellInfo fullName = new CellInfo(0, 17, 7);
-        private final CellInfo isDefault = new CellInfo(0, 25, 3);
+        private final CellInfo fullName = new CellInfo(0, 17, 8);
+        private final CellInfo isDefault = new CellInfo(0, 25, 4);
 
         PicklistData(Workbook book) {
             this.sheet = book.getSheet(SHEET_NAME);
