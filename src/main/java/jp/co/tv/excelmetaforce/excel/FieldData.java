@@ -73,6 +73,7 @@ public class FieldData extends SheetData {
         picklistData.read();
         int targetRow = START_ROW;
         List<CustomField> fields = new ArrayList<CustomField>();
+        final String objApi = excel.getStringValue(objectFullName);
         
         while (!excel.isEmpty(targetRow, fullName.getCol())) {
             if (excel.isEmpty(targetRow, isTarget.getCol())) {
@@ -94,7 +95,7 @@ public class FieldData extends SheetData {
             field.setCaseSensitive(converter.getCaseSensitive(excel.getStringValue(unique)));
             field.setExternalId(excel.getBooleanValue(externalId));
             setPicklistInfo(field, converter);
-            field.setTrackFeedHistory(excel.getBooleanValue(trackHistory));
+            field.setTrackHistory(excel.getBooleanValue(trackHistory));
             field.setReferenceTo(excel.getStringValue(referenceTo));
             field.setRelationshipName(excel.getStringValue(relationName));
             field.setRelationshipLabel(excel.getStringValue(relationLabel));
@@ -102,11 +103,14 @@ public class FieldData extends SheetData {
             field.setWriteRequiresMasterRead(excel.getBooleanValue(writeByReadAuth));
             field.setReparentableMasterDetail(excel.getBooleanValue(reparentable));
             field.setDefaultValue(excel.getStringValue(defaultValue));
-            field.setVisibleLines(converter.getVisibleLines(excel.getStringValue(visibleLines)));
+            setVisibleLines(field, converter);
             field.setMaskChar(converter.convMaskChar(excel.getStringValue(maskChar)));
             field.setMaskType(converter.convMaskType(excel.getStringValue(maskType)));
             field.setDisplayFormat(excel.getStringValue(displayFormat));
             
+            // put object name to field name here, because picklist use only field name.
+            field.setFullName(String.format("%s.%s", objApi, field.getFullName()));
+
             targetRow++;
             fields.add(field);
         }
@@ -186,6 +190,12 @@ public class FieldData extends SheetData {
             excel.setValueToEmpty(length, field.getLength());
             excel.setValue(scale, "");
         }
+    }
+    
+    private void setVisibleLines(CustomField field, ExcelToMetadata converter) {
+        int visibleLines = converter.getVisibleLines(excel.getStringValue(this.visibleLines));
+        if (visibleLines != 0) field.setVisibleLines(visibleLines);
+        
     }
     
     private void updateRow(int tmpRow) {

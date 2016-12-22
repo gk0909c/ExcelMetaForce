@@ -48,7 +48,7 @@ public class BaseConverter {
     }
 
     /**
-     * check passed type is numeric type.
+     * check passed type need length setting.
      * 
      * @param type target 
      * @return is numeric

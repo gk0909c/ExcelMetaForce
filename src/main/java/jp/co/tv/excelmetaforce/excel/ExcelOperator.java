@@ -32,16 +32,21 @@ public class ExcelOperator {
      * @return string value
      */
     public String getStringValue(CellInfo cellInfo) {
-        return getCell(cellInfo).getStringCellValue(); 
+        String val = getCell(cellInfo).getStringCellValue();
+        return StringUtils.stripToNull(val); 
     }
 
     /**
-     * return numeric cell value
+     * return numeric cell value, when invalid number format, return null.
      * @param cellInfo cellInfo
-     * @return string value
+     * @return integer value
      */
-    public Number getNumericValue(CellInfo cellInfo) {
-        return Integer.parseInt(getCell(cellInfo).getStringCellValue()); 
+    public Integer getNumericValue(CellInfo cellInfo) {
+        try {
+            return Integer.parseInt(getCell(cellInfo).getStringCellValue()); 
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     /**

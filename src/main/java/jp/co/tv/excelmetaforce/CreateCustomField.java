@@ -1,10 +1,10 @@
 package jp.co.tv.excelmetaforce;
 
-import jp.co.tv.excelmetaforce.excel.ObjectData;
+import jp.co.tv.excelmetaforce.excel.FieldData;
 import jp.co.tv.excelmetaforce.runner.Creater;
 
-public final class CreateCustomObject {
-    private CreateCustomObject() {}
+public final class CreateCustomField {
+    private CreateCustomField() {}
 
     /**
      * Read Custom Object Definition from excel workbook, and save to salesforce. 
@@ -18,7 +18,7 @@ public final class CreateCustomObject {
     public static void main(String... args) {
         // set create target metadata
         Class[] target = new Class[]{
-            ObjectData.class
+            FieldData.class
         };
         String excelFileName = "オブジェクト定義2.xlsx";
         

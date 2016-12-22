@@ -58,7 +58,7 @@ public class ObjectData extends SheetData {
         nameField.setLabel(excel.getStringValue(nameLabel));
         nameField.setType(converter.convFieldType(excel.getStringValue(type)));
         nameField.setDisplayFormat(excel.getStringValue(format));
-        nameField.setStartingNumber(excel.getNumericValue(startNum).intValue());
+        setStartingNumber(nameField);
 
         object.setNameField(nameField);
 
@@ -94,5 +94,12 @@ public class ObjectData extends SheetData {
 
         String[] targetObject = new String[]{objApi};
         return conn.readMetadata("CustomObject", targetObject);
+    }
+    
+    private void setStartingNumber(CustomField field) {
+        Integer startNum = excel.getNumericValue(this.startNum);
+        if (startNum == null) return;
+        field.setStartingNumber(startNum);
+        
     }
 }

@@ -27,6 +27,7 @@ proxyPass:
 ## 開発状況
 + 各行のスタイルなど
   + リストでの入力強制（FieldTypeとか）
++ テストのリファクタリング（ObjectData、FieldData）
 + オブジェクトの作成
 
 

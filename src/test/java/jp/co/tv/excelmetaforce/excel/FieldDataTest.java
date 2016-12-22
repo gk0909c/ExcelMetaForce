@@ -44,7 +44,7 @@ public class FieldDataTest {
         assertThat(fields.length, is(5));
 
         // first field
-        assertThat(fields[0].getFullName(), is("fullname__c"));
+        assertThat(fields[0].getFullName(), is("ObjectApiName.fullname__c"));
         assertThat(fields[0].getLabel(), is("label"));
         assertThat(fields[0].getType(), is(FieldType.Number));
         assertThat(fields[0].getPrecision(), is(5));
@@ -69,7 +69,7 @@ public class FieldDataTest {
         assertThat(fields[0].getDisplayFormat(), is("display format"));
 
         // second field
-        assertThat(fields[1].getFullName(), is("fullname3__c"));
+        assertThat(fields[1].getFullName(), is("ObjectApiName.fullname3__c"));
         assertThat(fields[1].getType(), is(FieldType.Text));
         assertThat(fields[1].getLength(), is(3));
 
@@ -193,6 +193,9 @@ public class FieldDataTest {
     }
     
     private void writeTestSheet(Sheet fieldSheet) {
+        Row headerRow = fieldSheet.createRow(0);
+        headerRow.createCell(27).setCellValue("ObjectApiName");
+
         Row row1 = fieldSheet.createRow(7);
         row1.createCell(0).setCellValue("a");
         row1.createCell(3).setCellValue("fullname__c");
