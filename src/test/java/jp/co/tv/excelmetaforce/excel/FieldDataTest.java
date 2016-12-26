@@ -83,6 +83,26 @@ public class FieldDataTest {
     }
     
     @Test
+    public void readFieldInfoLongTextArea() {
+        writeField(1, true,
+                "fullname__c", "long text area", "ロングテキストエリア", "", "", "", "",
+                "", "", "", "", "", "", "", "", "",
+                "", "", "", "", "3", "", "", "");
+
+        FieldData data = new FieldData(book);
+        CustomField[] fields = (CustomField[])data.read();
+
+        // field count
+        assertThat(fields.length, is(1));
+        // first field
+        assertField(fields[0],
+                "fullname__c", "long text area", FieldType.LongTextArea, 0, 0, null, null,
+                false, false, false, null, false, null, null, null,
+                null, false, false, null, 3,
+                null, null, null);
+    }
+    
+    @Test
     public void writeFieldInfoToExcel() {
         // prepare
         final CustomField field1 = createField("field1__c", "label1", FieldType.Text,
