@@ -5,6 +5,7 @@
     xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
   <description>Just the braces rules I like</description>
   <rule ref="rulesets/java/codesize.xml/TooManyMethods" />
+  <rule ref="rulesets/java/strings.xml/AvoidDuplicateLiterals" />
   
   <exclude-pattern>.*/src/test/java/.*</exclude-pattern>
 </ruleset>

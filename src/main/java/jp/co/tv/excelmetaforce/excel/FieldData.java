@@ -152,7 +152,6 @@ public class FieldData extends SheetData {
             excel.setValue(maskType, converter.convMaskType(field.getMaskType()));
             excel.setValue(displayFormat, field.getDisplayFormat());
 
-
             targetRow++;
         }
     }

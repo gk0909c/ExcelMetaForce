@@ -36,8 +36,9 @@ public class ObjectCrudDataTest {
     @Test
     public void readObjectCrudSheet() {
         // prepare
-        writeCrudRow(1, "TestProfile1", "○", "", "○", "", "○", "");
-        writeCrudRow(2, "TestProfile2", "", "○", "", "○", "", "○");
+        writeCrudRow(1, true, "TestProfile1", "○", "", "○", "", "○", "");
+        writeCrudRow(2, false, "dummy", "○", "○", "○", "○", "○", "○");
+        writeCrudRow(3, true, "TestProfile2", "", "○", "", "○", "", "○");
 
         ObjectCrudData data = new ObjectCrudData(book);
         final Profile[] profiles = (Profile[])data.read();
@@ -76,9 +77,9 @@ public class ObjectCrudDataTest {
         assertThat(data.getTargetMetadata(), is(new Metadata[]{profile1, profile2}));
     }
     
-    private void writeCrudRow(int rowNum, String profileName, String... cruds) {
+    private void writeCrudRow(int rowNum, boolean target, String profileName, String... cruds) {
         Row row = crudSheet.createRow(rowNum + 5);
-        row.createCell(0).setCellValue("a");
+        row.createCell(0).setCellValue(target ? "a" :  "");
         row.createCell(3).setCellValue(profileName);
         row.createCell(10).setCellValue(cruds[0]);
         row.createCell(14).setCellValue(cruds[1]);

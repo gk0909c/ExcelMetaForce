@@ -46,7 +46,9 @@
     <exclude name="LocalVariableCouldBeFinal"/>
     <exclude name="MethodArgumentCouldBeFinal"/>
   </rule>
-  <rule ref="rulesets/java/strings.xml" />
+  <rule ref="rulesets/java/strings.xml">
+    <exclude name="AvoidDuplicateLiterals"/>
+  </rule>
   <rule ref="rulesets/java/sunsecure.xml" />
   <rule ref="rulesets/java/typeresolution.xml" />
   <rule ref="rulesets/java/typeresolution.xml/SignatureDeclareThrowsException">
