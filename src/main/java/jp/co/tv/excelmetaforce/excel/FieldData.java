@@ -198,26 +198,6 @@ public class FieldData extends SheetData {
         
     }
     
-    private void updateRow(int tmpRow) {
-        updateRow(tmpRow, this);
-    }
-
-    private void updateRow(int tmpRow, Object instance) {
-        try {
-            java.lang.reflect.Field[] fields = instance.getClass().getDeclaredFields();
-            
-            for (java.lang.reflect.Field field : fields) {
-                if (!field.getType().equals(CellInfo.class)) continue;
-                
-                field.setAccessible(true);
-                CellInfo cellInfo = (CellInfo)field.get(instance);
-                cellInfo.setRow(tmpRow);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
     private void setPicklistInfo(CustomField field, ExcelToMetadata converter) {
         if (!isPicklist(field)) return;
         

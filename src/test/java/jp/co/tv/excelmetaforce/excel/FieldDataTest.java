@@ -8,9 +8,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import com.sforce.soap.metadata.CustomField;
 import com.sforce.soap.metadata.CustomObject;
@@ -26,9 +24,6 @@ import com.sforce.soap.metadata.ValueSetValuesDefinition;
 import jp.co.tv.excelmetaforce.sfdc.Connector;
 
 public class FieldDataTest {
-    @Rule
-    public ExpectedException notImplement = ExpectedException.none();
-    
     @Test
     public void testRead() {
         Workbook book = new XSSFWorkbook();

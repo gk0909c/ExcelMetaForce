@@ -29,4 +29,27 @@ public abstract class SheetData {
     public abstract void write(Metadata... write);
     
     public abstract Metadata[] getTargetMetadata();
+    
+    protected void updateRow(int tmpRow) {
+        updateRow(tmpRow, this);
+    }
+
+    protected void updateRow(int tmpRow, Object instance) {
+        try {
+            java.lang.reflect.Field[] fields = instance.getClass().getDeclaredFields();
+            
+            for (java.lang.reflect.Field field : fields) {
+                if (!field.getType().equals(CellInfo.class)) continue;
+                
+                field.setAccessible(true);
+                CellInfo cellInfo = (CellInfo)field.get(instance);
+                
+                if (cellInfo.isHeader()) continue;
+                
+                cellInfo.setRow(tmpRow);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
