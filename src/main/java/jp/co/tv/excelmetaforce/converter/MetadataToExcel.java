@@ -7,6 +7,7 @@ import com.sforce.soap.metadata.DeploymentStatus;
 import com.sforce.soap.metadata.EncryptedFieldMaskChar;
 import com.sforce.soap.metadata.EncryptedFieldMaskType;
 import com.sforce.soap.metadata.FieldType;
+import com.sforce.soap.metadata.ProfileFieldLevelSecurity;
 import com.sforce.soap.metadata.SharingModel;
 
 public class MetadataToExcel extends BaseConverter {
@@ -60,5 +61,20 @@ public class MetadataToExcel extends BaseConverter {
         } else {
             return StringUtils.EMPTY;
         }
+    }
+    
+    /**
+     * ○：editable && readable, △：readable, "": other
+     * 
+     * @param permission field level security
+     * @return converted
+     */
+    public String getFieldPermission(ProfileFieldLevelSecurity permission) {
+        if (permission.getEditable() && permission.getReadable()) {
+            return MARU;
+        } else if (permission.getReadable()) {
+            return SANKAKU;
+        }
+        return StringUtils.EMPTY;
     }
 }

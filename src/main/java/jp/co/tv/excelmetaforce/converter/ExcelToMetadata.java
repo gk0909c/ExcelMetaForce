@@ -66,4 +66,12 @@ public class ExcelToMetadata extends BaseConverter {
     public Integer getVisibleLines(String val) {
         return StringUtils.isEmpty(val) ? 0 : Integer.parseInt(val);
     }
+    
+    public boolean getEditable(String val) {
+        return MARU.equals(val);
+    }
+
+    public boolean getReadable(String val) {
+        return !StringUtils.isEmpty(val);
+    }
 }

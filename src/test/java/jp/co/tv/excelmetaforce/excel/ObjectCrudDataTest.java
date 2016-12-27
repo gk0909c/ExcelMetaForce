@@ -64,6 +64,11 @@ public class ObjectCrudDataTest {
     
     @Test
     public void testGetTargetMetadata() {
+        // prepare(not effective, but info log print these profiles)
+        writeCrudRow(1, true, "TestProfile5", "○", "", "○", "", "○", "");
+        writeCrudRow(2, false, "dummy", "○", "○", "○", "○", "○", "○");
+        writeCrudRow(3, true, "TestProfile6", "", "○", "", "○", "", "○");
+
         // Connector mock
         Profile profile1 = new Profile();
         profile1.setFullName("TestProfile5");
