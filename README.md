@@ -11,7 +11,7 @@ create yaml file ./sfdc_connection_info.yml.
 like this
 
 ```yaml
-!!jp.co.techvan.handleSfdcDD.sfdc.SfdcConnectionInfo
+!!jp.co.tv.excelmetaforce.sfdc.SfdcConnectionInfo
 username: xxx@xxx
 password: xxxx
 securityToken: 
@@ -25,13 +25,15 @@ proxyPass:
 ## commands
 ### read from salesforce to excel
 ```bash
-# read custom object (need write object api to general sheet(sheet(0))
+# read custom object (need write object api to general sheet(sheet(0)))
+# need delete rows, from row8 to all at field sheet(sheet(3)), from row7 to all at picklist sheet(sheet(4))
 java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.ReadCustomObject format.xlsx
 
-# read object crud (need write profile to crud sheet(sheet(5))
+# read object crud (need write profile to crud sheet(sheet(5)))
 java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.ReadObjectCrud format.xlsx
 
-# read field permission (need write profile to filed permission sheet(sheet(6))
+# read field permission (need write profile to filed permission sheet(sheet(6)))
+# need delete rows, from row8 to all at field permission sheet(sheet(6))
 java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.ReadFieldPermission format.xlsx
 ```
 
