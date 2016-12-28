@@ -1,8 +1,9 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'pmd'
 apply plugin: "jacoco"
 apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
 
 repositories {
     jcenter()
@@ -28,16 +29,12 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-pmd {
-    toolVersion '5.1.1'
-    ruleSetFiles = files(
-    	"${project.projectDir}/pmd_basic.xml",
-        "${project.projectDir}/pmd_exclude-test.xml"
-    )
-}
-
 jacocoTestReport {
     afterEvaluate {
+        reports {
+            xml.enabled = true
+        }
+        
         classDirectories = files(classDirectories.files.collect {
             fileTree(
                 dir: it,
@@ -53,5 +50,18 @@ jacocoTestReport {
 
 checkstyle {
     configFile = file("${project.projectDir}/checkstyle.xml")
-    toolVersion = '6.7'
+    toolVersion = '7.3'
+}
+
+findbugs {
+    excludeFilter = file("${project.projectDir}/findbugs_exclude.xml")
+    toolVersion = "3.0.1"
+}
+
+pmd {
+    toolVersion '5.5.2'
+    ruleSetFiles = files(
+    	"${project.projectDir}/pmd_basic.xml",
+        "${project.projectDir}/pmd_exclude-test.xml"
+    )
 }

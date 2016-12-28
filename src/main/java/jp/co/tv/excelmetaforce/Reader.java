@@ -6,12 +6,16 @@ import java.io.FileOutputStream;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sforce.soap.metadata.Metadata;
 
 import jp.co.tv.excelmetaforce.excel.SheetData;
 
 public class Reader {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Reader.class);
+
     private Workbook book;
     private SheetData data;
     private final String excelFileName;
@@ -29,12 +33,12 @@ public class Reader {
 
         try {
             stashFile = new File(excelFileName + "_1");
-            inputFile.renameTo(stashFile);
+            renameFile(inputFile, stashFile);
             book = WorkbookFactory.create(stashFile);
             this.data = dataCls.getDeclaredConstructor(Workbook.class).newInstance(book);
         } catch (Exception e) {
             closeWorkbook();
-            stashFile.renameTo(inputFile);
+            renameFile(stashFile, inputFile);
             throw new RuntimeException(e);
         }
     }
@@ -55,8 +59,14 @@ public class Reader {
             stashFile.deleteOnExit();
         } catch (Exception e) {
             closeWorkbook();
-            stashFile.renameTo(inputFile);
+            renameFile(stashFile, inputFile);
             throw new RuntimeException(e);
+        }
+    }
+    
+    private void renameFile(File fromFile, File toFile) {
+        if (fromFile.renameTo(toFile)) {
+            LOGGER.info("fail rename: %s to %s", fromFile.getName(), toFile.getName());
         }
     }
     

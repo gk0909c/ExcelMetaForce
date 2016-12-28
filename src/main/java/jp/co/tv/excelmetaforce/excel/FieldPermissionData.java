@@ -93,7 +93,7 @@ public class FieldPermissionData extends SheetData {
             profileCols.stream()
                 .filter(pCols -> profile.getFullName().equals(pCols.getProfileName()))
                 .collect(Collectors.toList()).get(0)
-                .createFieldSecurityMap(securities);;
+                .createFieldSecurityMap(securities);
         }
 
         // write each field permission per profile

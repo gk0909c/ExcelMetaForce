@@ -29,8 +29,10 @@ public class ConnectionManager {
                 try {
                     //get connetion info
                     Yaml yaml = new Yaml();
-                    SfdcConnectionInfo connectionInfo = 
-                            yaml.loadAs(new FileInputStream("sfdc_connection_info.yml"), SfdcConnectionInfo.class);
+                    
+                    FileInputStream input = new FileInputStream("sfdc_connection_info.yml");
+                    SfdcConnectionInfo connectionInfo = yaml.loadAs(input, SfdcConnectionInfo.class);
+                    input.close();
                     
                     // get connection
                     ConnectorConfig partnerConfig = new ConnectorConfig();
