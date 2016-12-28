@@ -22,44 +22,39 @@ proxyUser:
 proxyPass: 
 ```
 
+## commands
+### read from salesforce to excel
+```bash
+# read custom object (need write object api to general sheet(sheet(0))
+java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.ReadCustomObject format.xlsx
 
+# read object crud (need write profile to crud sheet(sheet(5))
+java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.ReadObjectCrud format.xlsx
 
-## 開発状況
-+ 各行のスタイルなど
-  + リストでの入力強制（FieldTypeとか）
-+ 実用化
-  + プロファイル系の実行クラス
-  + ファイル名の受け渡し
+# read field permission (need write profile to filed permission sheet(sheet(6))
+java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.ReadFieldPermission format.xlsx
+```
 
-## テンポラリ設計
-### やりたい操作
-#### Excelの情報をSalesforceに登録
-+ カスタムオブジェクト作成・更新
-+ カスタムフィールド作成・更新
-+ 関連プロファイル（ObjectCrud, FieldPermission）更新
+### create to salesforce from excel
+```bash
+# create custom object
+java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.CreateCustomObject target.xlsx
 
-#### Salesforceの情報をExcelに書き出し
-+ カスタムオブジェクト
-+ カスタムフィールド
-+ 関連プロファイル（ObjectCrud, FieldPermission）
+# create custom fields (put some character at target row, column A)
+java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.CreateCustomField target.xlsx
+```
 
-## クラス
-### Wrapper
-+ コマンドから呼ばれるクラスが9
-+ 実処理をするのは3（登録・更新・書き出し）
+### update to salesforce from excel
+```bash
+# update custom object
+java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.UpdateCustomObject target.xlsx
 
-### コンポーネント
-#### sfdc
-+ Connector
+# update custom fields (put some character at target row, column A)
+java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.UpdateCustomField target.xlsx
 
-#### Excel
-+ 各種シート（概要、オブジェクト、フィールド、選択リスト、CRUD、項目セキュリティ）
+# update object crud (put some character at target row, column A)
+java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.UpdateObjectCrud target.xlsx
 
-#### Convert
-+ Sfdcのデータ構造 ⇔ Excelのデータ構造
-
-#### util
-+ Sublist
-+ Yamlローダ
-
-削除は対象外
+# update field permission (put some character at target row, column A)
+java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.UpdateFieldPermission target.xlsx
+```

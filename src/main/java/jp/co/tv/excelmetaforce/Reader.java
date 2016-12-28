@@ -65,8 +65,8 @@ public class Reader {
     }
     
     private void renameFile(File fromFile, File toFile) {
-        if (fromFile.renameTo(toFile)) {
-            LOGGER.info("fail rename: %s to %s", fromFile.getName(), toFile.getName());
+        if (!fromFile.renameTo(toFile)) {
+            LOGGER.info(String.format("fail rename: %s to %s", fromFile.getName(), toFile.getName()));
         }
     }
     

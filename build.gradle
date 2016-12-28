@@ -65,3 +65,9 @@ pmd {
         "${project.projectDir}/pmd_exclude-test.xml"
     )
 }
+
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+     }
+ }
