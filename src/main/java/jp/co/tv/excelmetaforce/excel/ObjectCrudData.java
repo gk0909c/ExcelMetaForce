@@ -24,12 +24,12 @@ public class ObjectCrudData extends SheetData {
     private final CellInfo isTarget = new CellInfo(0, 0, 0);
     private final CellInfo rowNo = new CellInfo(0, 1, 0);
     private final CellInfo fullName = new CellInfo(0, 3, 0);
-    private final CellInfo readCell = new CellInfo(0, 10, 0);
-    private final CellInfo create = new CellInfo(0, 14, 0);
-    private final CellInfo edit = new CellInfo(0, 18, 0);
-    private final CellInfo delete = new CellInfo(0, 22, 0);
-    private final CellInfo allRead = new CellInfo(0, 26, 0);
-    private final CellInfo allModify = new CellInfo(0, 30, 0);
+    private final CellInfo readCell = new CellInfo(0, 10, 0, CellInfo.Dropdown.MARU);
+    private final CellInfo create = new CellInfo(0, 14, 0, CellInfo.Dropdown.MARU);
+    private final CellInfo edit = new CellInfo(0, 18, 0, CellInfo.Dropdown.MARU);
+    private final CellInfo delete = new CellInfo(0, 22, 0, CellInfo.Dropdown.MARU);
+    private final CellInfo allRead = new CellInfo(0, 26, 0, CellInfo.Dropdown.MARU);
+    private final CellInfo allModify = new CellInfo(0, 30, 0, CellInfo.Dropdown.MARU);
 
 
     public ObjectCrudData(Workbook book) {

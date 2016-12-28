@@ -1,5 +1,6 @@
 package jp.co.tv.excelmetaforce.excel;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.usermodel.XSSFDataValidation;
+import org.apache.poi.xssf.usermodel.XSSFDataValidationConstraint;
+import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,6 +129,7 @@ public class ExcelOperator {
         Cell cell = getCell(cellInfo);
         cell.setCellValue(valueSetter.apply(value));
         setStyle(cellInfo);
+        setDropdownInput(cellInfo);
     }
 
     /**
@@ -171,5 +178,22 @@ public class ExcelOperator {
         style.setVerticalAlignment(VerticalAlignment.CENTER);
         
         return style;
+    }
+    
+    private void setDropdownInput(CellInfo cellInfo) {
+        final Optional<String[]> dropdownOpt = Optional.ofNullable(cellInfo.getDropdown());
+
+        dropdownOpt.ifPresent(dropdown -> {
+            CellRangeAddressList addressList = new CellRangeAddressList(
+                cellInfo.getRow(), cellInfo.getRow(), cellInfo.getCol(), cellInfo.getCol()
+            );
+            XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper((XSSFSheet)sheet);
+            XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint)
+                    dvHelper.createExplicitListConstraint(dropdown);
+            XSSFDataValidation validation = (XSSFDataValidation)dvHelper.createValidation(
+                    dvConstraint, addressList);
+            validation.setShowErrorBox(true);
+            sheet.addValidationData(validation);
+        });
     }
 }

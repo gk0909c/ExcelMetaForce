@@ -144,7 +144,7 @@ public class FieldPermissionData extends SheetData {
             this.col = col;
 
             fullName = new CellInfo(START_ROW - 1, col, 0, true);
-            permission = new CellInfo(0, col, COL_SPAN);
+            permission = new CellInfo(0, col, COL_SPAN, CellInfo.Dropdown.MARU_SANKAKU);
             
             converterE2M = new ExcelToMetadata();
             converterM2E = new MetadataToExcel();

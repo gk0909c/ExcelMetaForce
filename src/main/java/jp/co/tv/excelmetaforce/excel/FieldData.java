@@ -38,27 +38,27 @@ public class FieldData extends SheetData {
     private final CellInfo rowNo = new CellInfo(0, 1, 2);
     private final CellInfo fullName = new CellInfo(0, 3, 7);
     private final CellInfo label = new CellInfo(0, 10, 7);
-    private final CellInfo type = new CellInfo(0, 17, 6);
+    private final CellInfo type = new CellInfo(0, 17, 6, CellInfo.Dropdown.FIELD_TYPE);
     private final CellInfo length = new CellInfo(0, 23, 3);
     private final CellInfo scale = new CellInfo(0, 26, 2);
     private final CellInfo description = new CellInfo(0, 28, 12);
     private final CellInfo helpText = new CellInfo(0, 40, 12);
-    private final CellInfo required = new CellInfo(0, 52, 2);
-    private final CellInfo unique = new CellInfo(0, 54, 2);
-    private final CellInfo externalId = new CellInfo(0, 56, 2);
-    private final CellInfo sortPicklist = new CellInfo(0, 58, 4);
+    private final CellInfo required = new CellInfo(0, 52, 2, CellInfo.Dropdown.MARU);
+    private final CellInfo unique = new CellInfo(0, 54, 2, CellInfo.Dropdown.MARU_SANKAKU);
+    private final CellInfo externalId = new CellInfo(0, 56, 2, CellInfo.Dropdown.MARU);
+    private final CellInfo sortPicklist = new CellInfo(0, 58, 4, CellInfo.Dropdown.MARU);
     private final CellInfo globalPicklist = new CellInfo(0, 62, 7);
-    private final CellInfo trackHistory = new CellInfo(0, 69, 2);
+    private final CellInfo trackHistory = new CellInfo(0, 69, 2, CellInfo.Dropdown.MARU);
     private final CellInfo referenceTo = new CellInfo(0, 71, 7);
     private final CellInfo relationName = new CellInfo(0, 78, 7);
     private final CellInfo relationLabel = new CellInfo(0, 85, 7);
-    private final CellInfo deleteConstraint = new CellInfo(0, 92, 4);
-    private final CellInfo writeByReadAuth = new CellInfo(0, 96, 4);
-    private final CellInfo reparentable = new CellInfo(0, 100, 4);
+    private final CellInfo deleteConstraint = new CellInfo(0, 92, 4, CellInfo.Dropdown.DELETE_CONSTRAINT);
+    private final CellInfo writeByReadAuth = new CellInfo(0, 96, 4, CellInfo.Dropdown.MARU);
+    private final CellInfo reparentable = new CellInfo(0, 100, 4, CellInfo.Dropdown.MARU);
     private final CellInfo defaultValue = new CellInfo(0, 104, 7);
     private final CellInfo visibleLines = new CellInfo(0, 111, 2);
-    private final CellInfo maskChar = new CellInfo(0, 113, 2);
-    private final CellInfo maskType = new CellInfo(0, 115, 6);
+    private final CellInfo maskChar = new CellInfo(0, 113, 2, CellInfo.Dropdown.MASK_CHAR);
+    private final CellInfo maskType = new CellInfo(0, 115, 6, CellInfo.Dropdown.MASK_TYPE);
     private final CellInfo displayFormat = new CellInfo(0, 121, 6);
 
 
@@ -257,7 +257,7 @@ public class FieldData extends SheetData {
         private final CellInfo fieldApiName = new CellInfo(0, 3, 7);
         private final CellInfo fieldLabel = new CellInfo(0, 10, 7);
         private final CellInfo fullName = new CellInfo(0, 17, 8);
-        private final CellInfo isDefault = new CellInfo(0, 25, 4);
+        private final CellInfo isDefault = new CellInfo(0, 25, 4, CellInfo.Dropdown.MARU);
 
         PicklistData(Workbook book) {
             this.sheet = book.getSheet(SHEET_NAME);

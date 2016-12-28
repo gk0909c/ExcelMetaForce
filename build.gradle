@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'pmd'
 apply plugin: "jacoco"
+apply plugin: 'checkstyle'
 
 repositories {
     jcenter()
@@ -48,4 +49,9 @@ jacocoTestReport {
             )
         })
     }
+}
+
+checkstyle {
+    configFile = file("${project.projectDir}/checkstyle.xml")
+    toolVersion = '6.7'
 }
