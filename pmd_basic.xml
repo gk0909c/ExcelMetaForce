@@ -34,7 +34,9 @@
     <!-- ローカル実行できなかったため、とりあえず保留 -->
     <!-- <exclude name="SingularField"/> -->
   </rule>
-  <rule ref="rulesets/java/logging-java.xml" />
+  <rule ref="rulesets/java/logging-java.xml">
+    <exclude name="SystemPrintln"/>
+  </rule>
   <rule ref="rulesets/java/migrating.xml" />
   <rule ref="rulesets/java/naming.xml">
     <exclude name="AbstractNaming"/>

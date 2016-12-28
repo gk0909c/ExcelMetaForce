@@ -45,8 +45,8 @@ public class ObjectCrudDataTest {
 
         // assert
         assertThat(profiles.length, is(2));
-        assertCrud(profiles[0], "TestProfile1", true, false, true, false, true, false);
-        assertCrud(profiles[1], "TestProfile2", false, true, false, true, false, true);
+        assertCrud(profiles[0], "TestProfile1", OBJ_NAME, true, false, true, false, true, false);
+        assertCrud(profiles[1], "TestProfile2", OBJ_NAME, false, true, false, true, false, true);
     }
     
     @Test
@@ -94,9 +94,10 @@ public class ObjectCrudDataTest {
         row.createCell(30).setCellValue(cruds[5]);
     }
     
-    private void assertCrud(Profile profile, String profileName, boolean... cruds) {
+    private void assertCrud(Profile profile, String profileName, String objectName, boolean... cruds) {
         ProfileObjectPermissions crud = profile.getObjectPermissions()[0];
         assertThat(profile.getFullName(), is(profileName));
+        assertThat(crud.getObject(), is(objectName));
         assertThat(crud.getAllowRead(), is(cruds[0]));
         assertThat(crud.getAllowCreate(), is(cruds[1]));
         assertThat(crud.getAllowEdit(), is(cruds[2]));

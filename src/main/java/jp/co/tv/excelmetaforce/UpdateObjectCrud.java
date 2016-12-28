@@ -1,9 +1,9 @@
 package jp.co.tv.excelmetaforce;
 
-import jp.co.tv.excelmetaforce.excel.ObjectData;
+import jp.co.tv.excelmetaforce.excel.ObjectCrudData;
 
-public final class CreateCustomObject {
-    private CreateCustomObject() {}
+public final class UpdateObjectCrud {
+    private UpdateObjectCrud() {}
 
     /**
      * Read Custom Object Definition from excel workbook, and save to salesforce. 
@@ -17,13 +17,13 @@ public final class CreateCustomObject {
     public static void main(String... args) {
         // set create target metadata
         Class[] target = new Class[]{
-            ObjectData.class
+            ObjectCrudData.class
         };
         String excelFileName = RunnerHelper.getFileName(args);
         
         // execute target operation
         for (Class cls : target) {
-            new Creater(cls, excelFileName).create();
+            new Creater(cls, excelFileName).update();
         }
     }
 }

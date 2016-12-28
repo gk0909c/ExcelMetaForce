@@ -70,7 +70,7 @@ public class MetadataToExcel extends BaseConverter {
      * @return converted
      */
     public String getFieldPermission(ProfileFieldLevelSecurity permission) {
-        if (permission.getEditable() && permission.getReadable()) {
+        if (permission.getEditable()) {
             return MARU;
         } else if (permission.getReadable()) {
             return SANKAKU;

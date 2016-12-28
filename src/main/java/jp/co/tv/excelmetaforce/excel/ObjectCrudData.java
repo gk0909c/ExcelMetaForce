@@ -22,14 +22,14 @@ public class ObjectCrudData extends SheetData {
     private final CellInfo objectFullName = new CellInfo(0, 27, 0, true);
 
     private final CellInfo isTarget = new CellInfo(0, 0, 0);
-    private final CellInfo rowNo = new CellInfo(0, 1, 2);
-    private final CellInfo fullName = new CellInfo(0, 3, 7);
-    private final CellInfo readCell = new CellInfo(0, 10, 4);
-    private final CellInfo create = new CellInfo(0, 14, 4);
-    private final CellInfo edit = new CellInfo(0, 18, 4);
-    private final CellInfo delete = new CellInfo(0, 22, 4);
-    private final CellInfo allRead = new CellInfo(0, 26, 4);
-    private final CellInfo allModify = new CellInfo(0, 30, 4);
+    private final CellInfo rowNo = new CellInfo(0, 1, 0);
+    private final CellInfo fullName = new CellInfo(0, 3, 0);
+    private final CellInfo readCell = new CellInfo(0, 10, 0);
+    private final CellInfo create = new CellInfo(0, 14, 0);
+    private final CellInfo edit = new CellInfo(0, 18, 0);
+    private final CellInfo delete = new CellInfo(0, 22, 0);
+    private final CellInfo allRead = new CellInfo(0, 26, 0);
+    private final CellInfo allModify = new CellInfo(0, 30, 0);
 
 
     public ObjectCrudData(Workbook book) {
@@ -49,6 +49,7 @@ public class ObjectCrudData extends SheetData {
             updateRow(targetRow);
 
             ProfileObjectPermissions objectPermission = new ProfileObjectPermissions();
+            objectPermission.setObject(excel.getStringValue(objectFullName));
             objectPermission.setAllowRead(excel.getBooleanValue(readCell));
             objectPermission.setAllowCreate(excel.getBooleanValue(create));
             objectPermission.setAllowEdit(excel.getBooleanValue(edit));
@@ -111,8 +112,10 @@ public class ObjectCrudData extends SheetData {
         String objApi = excel.getStringValue(objectFullName);
         ProfileObjectPermissions[] objectPermissions = profile.getObjectPermissions();
         
-        return Arrays.asList(objectPermissions).stream()
+        List<ProfileObjectPermissions> list =  Arrays.asList(objectPermissions).stream()
                 .filter(permission -> permission.getObject().equals(objApi))
-                .collect(Collectors.toList()).get(0);
+                .collect(Collectors.toList());
+        
+        return list.isEmpty() ? new ProfileObjectPermissions() : list.get(0);
     }
 }

@@ -1,11 +1,9 @@
 package jp.co.tv.excelmetaforce;
 
-import jp.co.tv.excelmetaforce.excel.FieldData;
-import jp.co.tv.excelmetaforce.excel.ObjectData;
+import jp.co.tv.excelmetaforce.excel.FieldPermissionData;
 
-public final class ReadCustomObject {
-
-    private ReadCustomObject() {}
+public final class ReadFieldPermission {
+    private ReadFieldPermission() {}
 
     /**
      * Read Custom Object Definition from salesforce, and write to excel workbook. 
@@ -19,10 +17,8 @@ public final class ReadCustomObject {
     public static void main(String... args) {
         // set read target metadata
         Class[] target = new Class[]{
-            ObjectData.class,
-            FieldData.class
+            FieldPermissionData.class,
         };
-
         String excelFileName = RunnerHelper.getFileName(args);
         
         // execute target operation
@@ -30,5 +26,4 @@ public final class ReadCustomObject {
             new Reader(cls, excelFileName).read();
         }
     }
-    
 }

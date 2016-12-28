@@ -1,7 +1,8 @@
-package jp.co.tv.excelmetaforce.runner;
+package jp.co.tv.excelmetaforce;
 
 import java.io.File;
 import java.util.List;
+import java.util.function.Function;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -37,14 +38,33 @@ public class Creater {
      * Write object definition to excel file
      */
     public void create() {
-        Connector conn = new Connector(new ConnectionManager());
+        Function<Metadata[], List<SaveResult>> func = metadata -> {
+            Connector conn = new Connector(new ConnectionManager());
+            return conn.createMetadata(metadata);
+        };
+        save(func);
+    }
+
+    /**
+     * Write object definition to excel file
+     */
+    public void update() { 
+        Function<Metadata[], List<SaveResult>> func = metadata -> {
+            Connector conn = new Connector(new ConnectionManager());
+            return conn.updateMetadata(metadata);
+        };
+        save(func);
+    }
+    
+    private void save(Function<Metadata[], List<SaveResult>> func) {
         Metadata[] metadata = data.read();
-        List<SaveResult> results = conn.createMetadata(metadata);
+        List<SaveResult> results = func.apply(metadata);
         
         for (SaveResult result : results) {
             for (com.sforce.soap.metadata.Error err : result.getErrors()) {
-                LOGGER.info(String.format("save error: %s", err.getMessage()));
+                LOGGER.warn(String.format("save error: %s", err.getMessage()));
             }
         }
+        
     }
 }

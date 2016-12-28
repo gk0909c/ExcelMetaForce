@@ -3,6 +3,7 @@
   <analysis enabled="true" />
   <rulesets>
     <ruleset name="pmd_basic" ref="pmd_basic.xml" refcontext="project" />
+    <ruleset name="pmd_exclude-test" ref="pmd_exclude-runner.xml" refcontext="project" />
     <ruleset name="pmd_exclude-test" ref="pmd_exclude-test.xml" refcontext="project" />
   </rulesets>
 </eclipse-pmd>

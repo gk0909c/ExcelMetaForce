@@ -1,4 +1,4 @@
-package jp.co.tv.excelmetaforce.runner;
+package jp.co.tv.excelmetaforce;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

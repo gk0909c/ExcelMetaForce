@@ -43,8 +43,7 @@ jacocoTestReport {
                 exclude: [
                     'jp/co/tv/excelmetaforce/sfdc/ConnectionManager.class',
                     'jp/co/tv/excelmetaforce/sfdc/SfdcConnectionInfo.class',
-                    'jp/co/tv/excelmetaforce/*.class',
-                    'jp/co/tv/excelmetaforce/runner/*.class'
+                    'jp/co/tv/excelmetaforce/*.class'
                 ]
             )
         })

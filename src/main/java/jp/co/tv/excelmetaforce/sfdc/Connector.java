@@ -61,6 +61,24 @@ public class Connector {
     }
     
     /**
+     * update metadata on Salesforce
+     * 
+     * @param metadata metadata array
+     * @return error results
+     */
+    public List<SaveResult> updateMetadata(Metadata... metadata) {
+        Function<Metadata[], SaveResult[]> func = list -> {
+            try {
+                return metaConn.updateMetadata(list);
+            } catch (ConnectionException e) {
+                throw new RuntimeException(e);
+            }
+        };
+        
+        return saveMetadata(metadata, func);
+    }
+    
+    /**
      * specify create or update in func argument
      */
     private List<SaveResult> saveMetadata(Metadata[] metadata, Function<Metadata[], SaveResult[]> func) {

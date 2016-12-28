@@ -1,7 +1,6 @@
 package jp.co.tv.excelmetaforce;
 
 import jp.co.tv.excelmetaforce.excel.FieldData;
-import jp.co.tv.excelmetaforce.runner.Creater;
 
 public final class CreateCustomField {
     private CreateCustomField() {}
@@ -20,7 +19,7 @@ public final class CreateCustomField {
         Class[] target = new Class[]{
             FieldData.class
         };
-        String excelFileName = "オブジェクト定義2.xlsx";
+        String excelFileName = RunnerHelper.getFileName(args);
         
         // execute target operation
         for (Class cls : target) {
