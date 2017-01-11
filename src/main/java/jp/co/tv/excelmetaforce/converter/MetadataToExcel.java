@@ -24,10 +24,12 @@ public class MetadataToExcel extends BaseConverter {
     }
 
     public String convDeploymentStatus(DeploymentStatus val) {
+        if (val == null) return StringUtils.EMPTY;
         return getMappingValue(DEPLOYMENT_STATUS, val.name());
     }
 
     public String convFieldType(FieldType val) {
+        if (val == null) return StringUtils.EMPTY;
         return getMappingValue(FIELD_TYPE, val.name());
     }
 

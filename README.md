@@ -60,3 +60,6 @@ java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.UpdateObjectCrud target.xlsx
 # update field permission (put some character at target row, column A)
 java -cp ExcelMetaForce.jar jp.co.tv.excelmetaforce.UpdateFieldPermission target.xlsx
 ```
+
+## future
++ 差分だけ読めるとよい

@@ -81,6 +81,14 @@ public class ObjectData extends SheetData {
         excel.setValue(search, object.getEnableSearch());
         
         CustomField name = object.getNameField();
+        if (name == null) {
+            // when standard object
+            excel.setValue(nameLabel, "");
+            excel.setValue(type, "");
+            excel.setValue(format, "");
+            excel.setValueToEmpty(startNum, 0);
+            return;
+        }
         excel.setValue(nameLabel, name.getLabel());
         excel.setValue(type, converter.convFieldType(name.getType()));
         excel.setValue(format, name.getDisplayFormat());

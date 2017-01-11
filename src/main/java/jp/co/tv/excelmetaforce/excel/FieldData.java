@@ -128,6 +128,7 @@ public class FieldData extends SheetData {
             CustomField field = (CustomField)target;
             updateRow(targetRow);
             
+            LOGGER.info(String.format("%s : %s", field.getFullName(), field.getType()));
             excel.setValue(rowNo, targetRow - headerRowRange);
             excel.setValue(fullName, field.getFullName());
             excel.setValue(label, field.getLabel());
@@ -216,6 +217,8 @@ public class FieldData extends SheetData {
     
     private boolean isPicklist(CustomField field) {
         FieldType type = field.getType();
+        if (type == null) return false;
+        
         return type.equals(FieldType.Picklist)
                 || type.equals(FieldType.MultiselectPicklist);
     }
@@ -223,13 +226,18 @@ public class FieldData extends SheetData {
     private void writePicklistDefinition(CustomField field) {
         // not picklist
         if (!isPicklist(field)) {
-            excel.setValue(sortPicklist, StringUtils.EMPTY);
-            excel.setValue(globalPicklist, StringUtils.EMPTY);
+            writeNotPicklist();
             return;
         }
 
-        // individual picklist
+        // when standard field, picklist field is enable to have no value set
         ValueSet valueSet = field.getValueSet();
+        if (valueSet == null) {
+            writeNotPicklist();
+            return;
+        }
+        
+        // individual picklist
         if (StringUtils.isEmpty(valueSet.getValueSetName())) {
             ValueSetValuesDefinition picklist = field.getValueSet().getValueSetDefinition();
             excel.setValue(sortPicklist, picklist.getSorted());
@@ -241,6 +249,11 @@ public class FieldData extends SheetData {
         // global picklist
         excel.setValue(sortPicklist, StringUtils.EMPTY);
         excel.setValue(globalPicklist, valueSet.getValueSetName());
+    }
+    
+    private void writeNotPicklist() {
+        excel.setValue(sortPicklist, StringUtils.EMPTY);
+        excel.setValue(globalPicklist, StringUtils.EMPTY);
     }
     
     class PicklistData {
